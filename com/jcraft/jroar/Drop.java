@@ -31,8 +31,8 @@ class Drop extends Page{
     register("/drop", Drop.class.getName());
   }
 
-  public void kick(MySocket ms, Hashtable vars, Vector h) throws IOException{
-
+//  public void kick(MySocket ms, Hashtable vars, Vector h) throws IOException{
+  public void kick(MySocket ms, Hashtable vars, ArrayList h) throws IOException{
     String mpoint=(String)vars.get("mpoint");
     String passwd=(String)vars.get("passwd");
     if(passwd==null || !passwd.equals(JRoar.passwd)){

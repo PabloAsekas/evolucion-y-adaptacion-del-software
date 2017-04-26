@@ -28,7 +28,8 @@ import com.jcraft.jogg.*;
 
 class Source{
   static Hashtable sources=new Hashtable();
-  Vector listeners=new Vector();
+//  Vector listeners=new Vector();  
+  ArrayList listeners=new ArrayList();
   String mountpoint=null;
   String source=null;
 
@@ -42,23 +43,29 @@ class Source{
   Comment current_comment=new Comment();
   int key_serialno=-1;
 
-  private Vector proxies=null;
+//  private Vector proxies=null;
+  private ArrayList proxies=null;
   void addListener(Client c){
     connections++;
     synchronized(listeners){
-      listeners.addElement(c);
+//      listeners.addElement(c);
+      listeners.add(c);
       if(c.proxy!=null){
-        if(proxies==null)proxies=new Vector();
-         proxies.addElement(c.proxy);
+//        if(proxies==null)proxies=new Vector();
+        if(proxies==null)proxies=new ArrayList();        
+//         proxies.addElement(c.proxy);
+         proxies.add(c.proxy);
       }
     }
   }
   void removeListener(Client c){
     synchronized(listeners){
-      listeners.removeElement(c);
+//      listeners.removeElement(c);
+      listeners.remove(c);
       if(c.proxy!=null){
         if(proxies!=null){
-          proxies.removeElement(c.proxy);
+//          proxies.removeElement(c.proxy);
+          proxies.remove(c.proxy);
 	}  
         //else{ } ???
       }
@@ -356,12 +363,18 @@ class Source{
 
   private static void kickmplisters(String mountpoint, boolean mount){
     synchronized(JRoar.mplisteners){
-      for(java.util.Enumeration e=JRoar.mplisteners.elements();
+//      for(java.util.Enumeration e=JRoar.mplisteners.elements();
+      /*for(java.util.Enumeration e=JRoar.mplisteners.elements();
 	   e.hasMoreElements();){
         if(mount)
           ((MountPointListener)(e.nextElement())).mount(mountpoint);
         else
-          ((MountPointListener)(e.nextElement())).unmount(mountpoint);
+          ((MountPointListener)(e.nextElement())).unmount(mountpoint);*/
+        for(int i=0; i<JRoar.mplisteners.size(); i++){
+            if (mount)
+                ((MountPointListener)(JRoar.mplisteners.get(i))).mount(mountpoint);
+            else
+                ((MountPointListener)(JRoar.mplisteners.get(i))).unmount(mountpoint);
       }
     }
   }

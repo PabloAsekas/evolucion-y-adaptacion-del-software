@@ -80,7 +80,8 @@ HttpServer.source_connections++;
     //if(me==null) return; 
     lasttime=System.currentTimeMillis();
 
-    Vector http_header=new Vector();
+//    Vector http_header=new Vector();
+    ArrayList http_header=new ArrayList();
     com.jcraft.jogg.Page[] pages=new com.jcraft.jogg.Page[10];
     int page_count=0;
 
@@ -114,7 +115,8 @@ HttpServer.source_connections++;
 	t=urlc.getHeaderFieldKey(i);
 	if(s==null)break;
 	// System.out.println("header: "+t+": "+s);
-	http_header.addElement((t==null?s:(t+": "+s)));
+//	http_header.addElement((t==null?s:(t+": "+s)));
+	http_header.add((t==null?s:(t+": "+s)));        
 	i++;
       }
 
@@ -122,7 +124,8 @@ HttpServer.source_connections++;
       foo="jroar-source."+index+": ";
       i=0;
       for(;i<http_header.size();i++){
-        s=(String)(http_header.elementAt(i));
+//        s=(String)(http_header.elementAt(i));
+        s=(String)(http_header.get(i));
         if(s.startsWith(foo)){
            index++;
            foo="jroar-source."+index+": ";
@@ -131,7 +134,8 @@ HttpServer.source_connections++;
 	}
         break;
       }
-      http_header.addElement(foo+source);
+//      http_header.addElement(foo+source);
+      http_header.add(foo+source);
 
       bitStream=urlc.getInputStream();
     }
@@ -230,7 +234,8 @@ HttpServer.source_connections++;
               Client c=null;
               for(int i=0; i<size;){
 	        try{
-                  c=(Client)(listeners.elementAt(i));
+//                  c=(Client)(listeners.elementAt(i));
+                  c=(Client)(listeners.get(i));
                   c.write(http_header, header,
   			  og.header_base, og.header, og.header_len,
 			  og.body_base, og.body, og.body_len);
@@ -312,11 +317,13 @@ HttpServer.source_connections++;
     synchronized(listeners){
       int size=listeners.size();
       for(int i=0; i<size;i++){
-        c=(Client)(listeners.elementAt(i));
+//        c=(Client)(listeners.elementAt(i));
+        c=(Client)(listeners.get(i));
         try{ c.close();}
         catch(Exception e){}
       }
-      listeners.removeAllElements();
+//      listeners.removeAllElements();
+      listeners.removeAll(listeners);
     }
   }
 
