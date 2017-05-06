@@ -42,7 +42,8 @@ class Stats extends Page{
   static final private char[] _sources="sources".toCharArray();
   static final private char[] _listeners="listeners".toCharArray();
 
-  public void kick(MySocket s, Hashtable vars, Vector httpheader) throws IOException{
+//  public void kick(MySocket s, Hashtable vars, Vector httpheader) throws IOException{
+  public void kick(MySocket s, Hashtable vars, ArrayList httpheader) throws IOException{      
 /*
     StringBuffer sb=new StringBuffer();
     sb.append("<?xml version=\"1.0\"?>\n");

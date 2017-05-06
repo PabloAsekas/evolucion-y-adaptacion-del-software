@@ -35,7 +35,8 @@ class Pls extends Page{
     super();
     this.pls=pls;
   }
-  public void kick(MySocket ms, Hashtable vars, Vector h) throws IOException{
+//  public void kick(MySocket ms, Hashtable vars, Vector h) throws IOException{
+  public void kick(MySocket ms, Hashtable vars, ArrayList h) throws IOException{
     byte[] foo=pls.getBytes();
     foo[foo.length-1]='g'; foo[foo.length-2]='g'; foo[foo.length-3]='o';
     String ogg=new String(foo);

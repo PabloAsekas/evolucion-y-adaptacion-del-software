@@ -32,7 +32,8 @@ public class UserPage extends Page{
   protected static void register(String src, String dst){
   }
 
-  public void kick(MySocket s, Hashtable vars, Vector httpheader) throws IOException{
+//  public void kick(MySocket s, Hashtable vars, Vector httpheader) throws IOException{
+  public void kick(MySocket s, Hashtable vars, ArrayList httpheader) throws IOException{
     s.println( "HTTP/1.0 200 OK" );
     s.println( "Content-Type: text/html" );
     s.println( "" ) ;

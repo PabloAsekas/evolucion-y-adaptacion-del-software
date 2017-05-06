@@ -34,7 +34,8 @@ class Ctrl extends Page{
   private static final int REFRESH=60;
   private static int count=0;
 
-  public void kick(MySocket s, Hashtable vars, Vector httpheader) throws IOException{
+//  public void kick(MySocket s, Hashtable vars, Vector httpheader) throws IOException{
+    public void kick(MySocket s, Hashtable vars, ArrayList httpheader) throws IOException{
     count++;
     s.println( "HTTP/1.0 200 OK" );
     s.println( "Content-Type: text/html" );
@@ -186,7 +187,8 @@ class Ctrl extends Page{
 
     s.println("<table cellpadding=3 cellspacing=0 border=0>");
     for(int i=0; i<Client.clients.size(); i++){
-      Client c=((Client)(Client.clients.elementAt(i)));
+      //Client c=((Client)(Client.clients.elementAt(i)));
+      Client c=((Client)(Client.clients.get(i)));
       if(c instanceof ShoutClient){
       ShoutClient sc=(ShoutClient)c;
       s.println("<tr>");

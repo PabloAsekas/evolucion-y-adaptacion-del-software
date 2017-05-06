@@ -62,7 +62,10 @@ class ShoutClient extends Client{
     }	
   }
 
-  public void write(Vector http_header, byte[] header,
+  /*public void write(Vector http_header, byte[] header,
+		    byte[] foo, int foostart, int foolength,
+		    byte[] bar, int barstart, int barlength) throws IOException{*/
+  public void write(ArrayList http_header, byte[] header,
 		    byte[] foo, int foostart, int foolength,
 		    byte[] bar, int barstart, int barlength) throws IOException{
     lasttime=System.currentTimeMillis();
@@ -80,7 +83,8 @@ class ShoutClient extends Client{
       mysocket.println("ice-public: 0");
       mysocket.println("ice-description: A short description");
       for(int i=1; i<http_header.size(); i++){
-        mysocket.println((String)(http_header.elementAt(i)));
+//        mysocket.println((String)(http_header.elementAt(i)));
+        mysocket.println((String)(http_header.get(i)));
       }
       mysocket.println("");
       mysocket.flush();
