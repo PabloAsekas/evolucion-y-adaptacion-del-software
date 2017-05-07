@@ -44,15 +44,38 @@ class Ctrl extends Page{
     s.println("<HTML><HEAD>");
 //  s.println("<META HTTP-EQUIV=\"refresh\" content=\""+REFRESH+";URL=/ctrl.html\">");
     s.println("<TITLE>JRoar "+JRoar.version+" at "+HttpServer.myURL+"/</TITLE>");
+    s.pn("<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />");
+    s.pn("<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>");
+    s.pn("<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>");
+    s.pn("<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>");
+    s.println("<link href='http://www.conocemadrid.esy.es/jroar.css' rel='stylesheet' type='text/css' media='all' />");
     s.println("</HEAD><BODY>");
-    s.println( "<h1>JRoar "+JRoar.version+" at "+HttpServer.myURL+"/</h1>" );
-
     Enumeration keys=Source.sources.keys();
     if(keys.hasMoreElements()){ 
       //s.println("Mount points.<br>"); 
     }
-    else{ s.println("There is no mount point.<br>"); }
-
+    else{ //s.println("There is no mount point.<br>");   
+    }
+    //añado a partir de aqui lo nuevo
+    s.pn("<nav class='navbar navbar-inverse'>\n" +
+"  <div class='container-fluid'>\n" +
+"    <div class='navbar-header'>\n" +
+"      <button type='button' class='navbar-toggle' data-toggle='collapse' data-target='#myNavbar'>\n" +
+"        <span class='icon-bar'></span>\n" +
+"        <span class='icon-bar'></span>\n" +
+"        <span class='icon-bar'></span>                        \n" +
+"      </button>\n" +
+"      <a class='navbar-brand' href='#'>JRoar v."); s.pn(JRoar.version); s.pn("</a>\n" +
+"    </div>\n" +
+"    <div class='collapse navbar-collapse' id='myNavbar'>\n" +
+"      <ul class='nav navbar-nav'>\n" +
+"        <li class='active'><a href='#'>Panel de control</a></li>\n" +
+"        <li><a href='#'>Page 2</a></li>\n" +
+"        <li><a href='#'>Page 3</a></li>\n" +
+"      </ul>\n" +
+"    </div>\n" +
+"  </div>\n" +
+"</nav>");
     s.println("<table cellpadding=3 cellspacing=0 border=0>");
     for(; keys.hasMoreElements();){
       String mountpoint=((String)(keys.nextElement()));
@@ -119,39 +142,44 @@ class Ctrl extends Page{
     }
     s.println("</table>");
 
-    s.println("<hr width=80%>");
-    s.println("<font size=+1>Mount</font>");
-    s.println("<table cellpadding=3 cellspacing=0 border=0>");
-    s.println("<form method=post action=/mount>");
-    s.println("<tr><td>");
-    s.print("mountpoint:&nbsp;"); 
-    s.print("<input type=text name=mountpoint value='/' size=10 maxlength=32>");
-    s.print("&nbsp;&nbsp;"); 
-    s.print("source:&nbsp;"); 
-    s.print("<input type=text name=source value='http://' size=40 maxlength=100>");
-
-    s.print("&nbsp;&nbsp;"); 
-    s.print("<select name=livestream>");
-    s.print("  <option value='true' selected>LiveStream</option>");
-    s.print("  <option value='false'>PlayList</option>");
-    s.print("</select>");
-
-    s.print("&nbsp;&nbsp;"); 
-    s.print("limit:&nbsp;"); 
-    s.print("<input type=text name=limit value='' size=3 maxlength=3>");
-
-    s.println("</td></tr>");
-
-    s.println("<tr><td>");
-    s.print("passwd:&nbsp;"); 
-    s.print("<input type=password name=passwd value='' length=8>");
-
-    s.print("&nbsp;&nbsp;"); 
-    s.print("<input type=submit name=Mount value=Mount>");
-    s.println("</td></tr>");
-    s.print("</form>");
-    s.print("</table>");
-
+    //si no hay puntos de montje:
+    s.println("<div class='container-fluid' style='padding:35px;'>\n" +
+"  <div class='row'>\n" +
+"      <div class='col-md-6 col-md-offset-3' style='background-color:#eceff1; padding:35px; border-radius:15px'>\n" +
+"        <div class='row'>\n" +
+"                  <h3 align='center'>Montar Streaming</h3>\n" +
+"            <form method=post action=/mount>\n" +
+"            <div class='form-group'>\n" +
+"                  <label>Mount:</label>\n" +
+"                  <input class='form-control' type=text name=mountpoint value='/'/>\n" +
+"            </div>\n" +
+"            <div class='form-group'>\n" +
+"                  <label>Source:</label>\n" +
+"                  <input class='form-control' type=text name=source value='http://'>\n" +
+"            </div>\n" +
+"            <div class='form-group'>\n" +
+"                  <select name='livestream'>Source:\n" +
+"                    <option value='true' selected>Livestream</option>\n" +
+"                    <option value='false'>Playlist</option>\n" +
+"                  </select>\n" +
+"             </div>\n" +
+"            <div class='form-group'>\n" +
+"                  <label>Limit:</label>\n" +
+"                  <input class='form-control' type=text name=limit value=''>\n" +
+"                  \n" +
+"            </div>\n" +
+"            <div class='form-group'>\n" +
+"                  <label>Password:</label>\n" +
+"                  <input class='form-control' type=password name=passwd value=''>\n" +
+"            </div>\n" +
+"            <button type='submit' class='btn btn-primary btn-block' name='Mount' value='Mount' >Montar</button>\n" +
+"            </form>\n" +
+"        </div>\n" +
+"      </div>\n" +
+"  </div>\n" +
+"</div>");
+   
+    //
     s.print("<p>");
 
     synchronized(Client.clients){

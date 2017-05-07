@@ -46,15 +46,42 @@ class HomePage extends Page{
 //  s.pn("<META HTTP-EQUIV=\"refresh\" content=\""+REFRESH+";URL=/\">");
     s.p("<TITLE>JRoar "); s.p(JRoar.version); s.p(" at "); 
                           s.p(HttpServer.myURL); s.pn("/</TITLE>");
+    s.pn("<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />");
+    s.pn("<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>");
+    s.pn("<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>");
+    s.pn("<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>");
+    s.pn("<link href='http://www.conocemadrid.esy.es/jroar.css' rel='stylesheet' type='text/css' media='all' />");                      
     s.pn("</HEAD><BODY>");
-    s.p( "<h1>JRoar "); s.p(JRoar.version); s.p(" at ");
-                        s.p(HttpServer.myURL); s.pn("/</h1>");
-
+    //s.p( "<h1>JRoar "); s.p(JRoar.version); s.p(" at ");
+    //                    s.p(HttpServer.myURL); s.pn("/</h1>");
+    s.pn("<nav class='navbar navbar-inverse'>\n" +
+"  <div class='container-fluid'>\n" +
+"    <div class='navbar-header'>\n" +
+"      <button type='button' class='navbar-toggle' data-toggle='collapse' data-target='#myNavbar'>\n" +
+"        <span class='icon-bar'></span>\n" +
+"        <span class='icon-bar'></span>\n" +
+"        <span class='icon-bar'></span>                        \n" +
+"      </button>\n" +
+"      <a class='navbar-brand' href='#'>JRoar v."); s.pn(JRoar.version); s.pn("</a>\n" +
+"    </div>\n" +
+"    <div class='collapse navbar-collapse' id='myNavbar'>\n" +
+"      <ul class='nav navbar-nav'>\n" +
+"        <li class='active'><a href='#'>Panel de control</a></li>\n" +
+"        <li><a href='#'>Page 2</a></li>\n" +
+"        <li><a href='#'>Page 3</a></li>\n" +
+"      </ul>\n" +
+"    </div>\n" +
+"  </div>\n" +
+"</nav>");
     Enumeration keys=Source.sources.keys();
     if(keys.hasMoreElements()){ 
       //s.pn("Mount points.<br>"); 
     }
-    else{ s.pn("There is no mount point.<br>"); }
+    else{ s.pn("<div class='container'>\n" +
+"  <div class='alert alert-warning'>\n" +
+"    <strong>¡Atención!</strong> No existe ningún punto de montaje <a href='/ctrl.html' class='alert-link'>Pulse aquí para agregar uno</a>.\n" +
+"  </div>\n" +
+"</div>"); }
 
     s.pn("<table cellpadding=3 cellspacing=0 border=0>");
     for(; keys.hasMoreElements();){
