@@ -89,21 +89,22 @@ class HomePage extends Page{
       Source source=Source.getSource(mountpoint); if(source==null) continue;
       String source_name=source.source;
 
-      s.pn("<tr>");
-
-      s.pn("<td align=left nowrap>");
+      s.pn("<div class='container'><div class='alert alert-success'>\n" +
+"  Estamos sonando en <strong>");
       s.p("<a href="); s.p(ogg2m3u(mountpoint)); s.p(">"); s.p(mountpoint);
       if(source instanceof UDPSource){
          UDPSource foo=(UDPSource)source;
          s.p("(UDP:"); s.p(foo.b.port); s.p(")");
       }
       s.p("</a>");
-      s.p("&nbsp;"); s.p("("); s.p(source.getListeners()); s.p(",");
-                               s.p(source.getConnections()); s.p(")");
-      s.pn("</td>");
+      
+      
+      s.p("&nbsp;"); 
+      s.p("Con un total de "); s.p(source.getListeners()); s.p("&nbsp;<span class=\"glyphicon glyphicon-headphones\"></span> oyentes, y ");
+                               s.p(source.getConnections()); s.p("&nbsp;<span class=\"glyphicon glyphicon-user\"></span>&nbsp;conexiones");
 
-      s.pn("<td nowrap> &lt;--- </td>");
-
+      s.pn("</div></div>");
+      
       if(source instanceof Proxy){
         s.pn("<td align=left>");
         s.p("<a href="); s.p(source_name); s.p(">");
@@ -117,7 +118,7 @@ class HomePage extends Page{
         s.pn("</td>");
       }
       else{
-        s.p("<td align=left>"); s.p(source_name); s.pn("</td>");
+        //s.p("<td align=left>"); s.p(source_name); s.pn("</td>"); //playlist
       }
       s.pn("</tr>");
 
@@ -162,7 +163,7 @@ class HomePage extends Page{
     s.pn("<hr width=80%>");
 
     s.pn("<table width=100%>");
-    s.pn("<tr><td align=\"right\"><a href=\"/ctrl.html\">Control</a></td></tr>");
+    s.pn("<tr><td align=\"right\"><a style='margin-right:25px;' type=\"button\" href=\"/ctrl.html\" class=\"btn btn-primary btn-lg\"><span class=\"glyphicon glyphicon-cog\"></span>&nbsp;Control</a></td></tr>");
     s.p("<tr><td align=\"right\"><small><i>"); s.p(count); s.pn("</i></small></td></tr>");
     s.pn("</table>");
 
