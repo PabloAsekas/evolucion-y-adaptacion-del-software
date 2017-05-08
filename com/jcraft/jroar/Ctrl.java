@@ -82,19 +82,21 @@ class Ctrl extends Page{
       Source source=Source.getSource(mountpoint); if(source==null) continue;
       String source_name=source.source;
 
-      s.println("<tr>");
-
-      s.println("<td align=left nowrap>");
-      s.print("<a href="+ogg2m3u(mountpoint)+">"+mountpoint);
+      
+      s.pn("<div class='container'><div class='alert alert-success'>\n" +
+"  Estamos sonando en <strong>");
+      s.p("<a href="); s.p(ogg2m3u(mountpoint)); s.p(">"); s.p(mountpoint);
       if(source instanceof UDPSource){
          UDPSource foo=(UDPSource)source;
-         s.print("(UDP:"+foo.b.port+")");
+         s.p("(UDP:"); s.p(foo.b.port); s.p(")");
       }
-      s.print("</a>");
-      s.print("&nbsp;("+source.getListeners()+","+source.getConnections()+")");
-      s.println("</td>");
+      s.p("</a>");
+      s.p("&nbsp;"); 
+      s.p("Con un total de "); s.p(source.getListeners()); s.p("&nbsp;<span class=\"glyphicon glyphicon-headphones\"></span> oyentes, y ");
+                               s.p(source.getConnections()); s.p("&nbsp;<span class=\"glyphicon glyphicon-user\"></span>&nbsp;conexiones");
 
-      s.println("<td nowrap> &lt;--- </td>");
+      s.pn("</div></div>");
+
 
       if(source instanceof Proxy){
         s.println("<td align=left>");
@@ -108,7 +110,7 @@ class Ctrl extends Page{
         s.println("</td>");
       }
       else{
-        s.println("<td align=left>"+source_name+"</td>");
+        //s.println("<td align=left>"+source_name+"</td>"); playlist
       }
       s.println("</tr>");
       /*
