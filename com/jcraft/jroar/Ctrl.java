@@ -189,25 +189,35 @@ class Ctrl extends Page{
     keys=Source.sources.keys();
     if(keys.hasMoreElements()){
     s.println("<hr width=80%>");
-    s.println("<font size=+1>Drop</font>");
-    s.println("<table cellpadding=3 cellspacing=0 border=0>");
-    s.println("<form method=post action=/drop>");
-
-    s.print("<select name=mpoint size=1>");
-    for(; keys.hasMoreElements();){
+    s.println("<div class='container-fluid' style='padding:35px;'>\n" +
+"  <div class='row'>\n" +
+"      <div class='col-md-6 col-md-offset-3' style='background-color:#eceff1; padding:35px; border-radius:15px'>\n" +
+"        <div class='row'>\n" +
+"                  <h3 align='center'>Drop</h3>\n" +
+"            <form method='post' action=/drop>\n" +
+"            <div class='form-group'>\n" +
+"                  <label>Drop:</label>\n" +
+"                  <select name=mpoint size=1>\n");
+                    for(; keys.hasMoreElements();){
       String mpoint=((String)(keys.nextElement()));
       s.println("<OPTION VALUE="+mpoint+">"+mpoint);
     }
-    s.print("</select>");
-
-    s.print("&nbsp;&nbsp;"); 
-    s.print("passwd:&nbsp;"); 
-    s.print("<input type=password name=passwd value='' length=8>");
-
-    s.print("&nbsp;&nbsp;"); 
-    s.print("<input type=submit name=Drop value=Drop>");
-    s.print("</form>");
-    s.print("</table>");
+    s.print("</select>\n" +
+"            </div>\n" +  
+"            <div class='form-group'>\n" +
+"                  <label>Drop:</label>\n" +
+"                  <input class='form-control' value='/'/>\n" +
+"            </div>\n" + 
+"            <div class='form-group'>\n" +
+"                  <label>Password:</label>\n" +
+"                  <input class='form-control' type=password name=passwd value='' length=8>\n" +
+"            </div>\n" +
+"            <input type=submit name=Drop value=Drop>\n" +            
+"            </form>\n" +
+"        </div>\n" +
+"      </div>\n" +
+"  </div>\n" +
+"</div>");
     }
 
     keys=Source.sources.keys();
