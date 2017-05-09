@@ -22,7 +22,6 @@
 
 package com.jcraft.jroar;
 import java.io.*;
-import java.net.*;
 import java.util.*;
 
 import com.jcraft.jogg.*;
@@ -127,7 +126,7 @@ System.out.println("accept: "+accept);
           mysocket.println("");
    	  mysocket.flush();
         }
-        catch(Exception e){}
+        catch(IOException e){}
         drop();
         mountpoint=null;
         try { if(mysocket!=null)mysocket.close(); } 
@@ -140,7 +139,7 @@ System.out.println("accept: "+accept);
         mysocket.println("");
         mysocket.flush();
       }
-      catch(Exception e){}
+      catch(IOException e){}
     }
     else {
       System.out.println("unkown protocol: "+protocol);
@@ -194,7 +193,7 @@ System.out.println("accept: "+accept);
         int index=oy.buffer(BUFSIZE);
         buffer=oy.data;
         try{ bytes=bitStream.read(buffer, index, BUFSIZE); }
-        catch(Exception e){
+        catch(IOException e){
 //        System.err.println(e);
           if(me==null)break;
           bytes=-1;
@@ -204,7 +203,7 @@ System.out.println("accept: "+accept);
         if(bytes==0)break;
 
         try{Thread.sleep(1);}  // sleep for green thread.
-        catch(Exception e){}
+        catch(InterruptedException e){}
 
         lasttime=System.currentTimeMillis();
 
@@ -252,7 +251,7 @@ System.out.println("accept: "+accept);
   			  og.header_base, og.header, og.header_len,
 			  og.body_base, og.body, og.body_len);
 		}
-		catch(Exception e){
+		catch(IOException e){
                   c.close();
                   removeListener(c);
                   size--;
@@ -305,11 +304,13 @@ System.out.println("accept: "+accept);
     }
   }
 
-  void drop(){
+  @Override
+  final void drop(){
     drop_clients();
     super.drop();
   }
 
+  @Override
   void addListener(Client c){
     super.addListener(c);
     if((System.currentTimeMillis()-lasttime)>TIMEOUT){

@@ -21,9 +21,7 @@
  */
 
 package com.jcraft.jroar;
-import java.lang.*;
 import java.io.*;
-import java.net.*;
 import java.util.*;
 
 class Mount extends Page{
@@ -32,6 +30,7 @@ class Mount extends Page{
   }
 
 //  public void kick(MySocket ms, Hashtable vars, Vector h) throws IOException{
+  @Override
   public void kick(MySocket ms, Hashtable vars, ArrayList h) throws IOException{
     String mountpoint=(String)vars.get("mountpoint");
     String source=(String)vars.get("source");
@@ -47,7 +46,7 @@ class Mount extends Page{
       String _limit=(String)vars.get("limit");
       if(_limit!=null){
         try{ limit=Integer.parseInt(_limit); }
-        catch(Exception e){}
+        catch(NumberFormatException e){}
       }
     }
 
@@ -85,7 +84,6 @@ class Mount extends Page{
 
     }
     forward(ms, "/");
-    return;
   }
 
 }

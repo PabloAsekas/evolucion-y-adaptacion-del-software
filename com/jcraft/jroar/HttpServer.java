@@ -21,7 +21,6 @@
  */
 
 package com.jcraft.jroar;
-import java.lang.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -64,11 +63,12 @@ class HttpServer extends Thread{
         myURL="http://"+myaddress+":"+port;
       //System.out.println("myURL: "+myURL);
     }
-    catch(Exception e){
+    catch(UnknownHostException e){
       System.out.println(e );
     }
   }
 
+  @Override
   public void run(){
     Socket socket=null;
     while(true){
@@ -89,17 +89,18 @@ class HttpServer extends Thread{
       this.socket=socket;
       start();
     }
+    @Override
     public void run(){
       try{(new Dispatch(socket)).doit();}
-      catch(Exception e){}
+      catch(IOException e){}
     }
   }
 }
  
 class Dispatch{
   private MySocket mySocket=null;
-  private String rootDirectory=".";
-  private String defaultFile="index.html";
+  private final String rootDirectory=".";
+  private final String defaultFile="index.html";
 
   Dispatch(Socket s) throws IOException{
     super();
@@ -191,7 +192,7 @@ System.out.println(" "+foo);
 	}
       }
     }
-    catch(Exception e){
+    catch(IOException | ClassNotFoundException | IllegalAccessException | InstantiationException e){
     }
     Page.unknown(mySocket, file);
   }
@@ -270,7 +271,7 @@ System.out.println(" "+foo);
         }
       }
     }
-    catch(Exception e) {
+    catch(IOException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
     }
 
     if(_file.endsWith(".pls")){
@@ -363,7 +364,7 @@ HttpServer.source_connections++;
         mySocket.flush();
         mySocket.close( ) ;
       }
-      catch(Exception e){
+      catch(IOException e){
       }
     }
   }
@@ -403,11 +404,10 @@ System.out.println(mySocket.socket.getInetAddress()+": "+foo+" "+(new java.util.
 
       if(bar.equalsIgnoreCase("SOURCE")){
         procSOURCE(foo, v);
-        return;
       }
 
     }
-    catch(Exception e){
+    catch(IOException e){
     }
   }
 }

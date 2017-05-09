@@ -23,7 +23,6 @@
 package com.jcraft.jroar;
 import java.io.*;
 import java.net.*;
-import java.util.*;
 
 public class MySocket {
   Socket socket=null;
@@ -33,7 +32,7 @@ public class MySocket {
   MySocket(Socket s) throws IOException{
 
     try{ s.setTcpNoDelay(true); }
-    catch(Exception e){
+    catch(SocketException e){
       System.out.println(e+" tcpnodelay");
     }
     socket=s;

@@ -21,9 +21,7 @@
  */
 
 package com.jcraft.jroar;
-import java.lang.*;
 import java.io.*;
-import java.net.*;
 import java.util.*;
 
 class Debug extends Page{
@@ -32,6 +30,7 @@ class Debug extends Page{
   }
 
 //  public void kick(MySocket s, Hashtable vars, Vector httpheader) throws IOException{
+  @Override
   public void kick(MySocket s, Hashtable vars, ArrayList httpheader) throws IOException{
     s.println( "HTTP/1.0 200 OK" );
     s.println( "Content-Type: text/html" );
@@ -78,17 +77,14 @@ s.println("<p>");
     }
   }
   private void  wrap(StringBuffer sb, String tag, String  foo){
-    sb.append("<"+tag+">"+foo+"</"+tag+">");
-    return;
+    sb.append("<").append(tag).append(">").append(foo).append("</").append(tag).append(">");
   }
   private void  wrapln(StringBuffer sb, String tag, String  foo){
     wrap(sb, tag, foo);
     ln(sb);
-    return;
   }
   static final String _ln="\n";
   private void  ln(StringBuffer sb){
     sb.append(_ln);
-    return;
   }
 }

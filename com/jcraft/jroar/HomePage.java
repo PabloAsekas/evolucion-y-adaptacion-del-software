@@ -21,9 +21,7 @@
  */
 
 package com.jcraft.jroar;
-import java.lang.*;
 import java.io.*;
-import java.net.*;
 import java.util.*;
 
 class HomePage extends Page{
@@ -36,6 +34,7 @@ class HomePage extends Page{
   private static int count=0;
 
 //  public void kick(MySocket s, Hashtable vars, Vector httpheader) throws IOException{
+  @Override
   public void kick(MySocket s, Hashtable vars, ArrayList httpheader) throws IOException{
     count++;
     s.pn( "HTTP/1.0 200 OK" );
@@ -139,22 +138,21 @@ class HomePage extends Page{
 
       Object[] proxies=source.getProxies();
       if(proxies!=null){
-        for(int i=0; i<proxies.length; i++){
-          String foo=(String)(proxies[i]);
-          s.pn("<tr>");
-          s.pn("<td>&nbsp;</td>");
-          s.pn("<td nowrap>---&gt</td>");
-          String host=getHost(foo);
-          if(host==null){
-            s.p("<td><a href="); s.p(ogg2m3u(foo)); s.p(">"); s.p(foo);
-            s.pn("</a></td>");
-	  }
-          else{
-            s.p("<td><a href="); s.p(ogg2m3u(foo)); s.p(">"); s.p(foo.substring(host.length()-1)); s.p("</a>&nbsp;at&nbsp;");
-            s.p("<a href="); s.p(host); s.p(">"); s.p(host); s.pn("</a></td>");
-	  }
-          s.pn("</tr>");
-	}
+          for (Object proxie : proxies) {
+              String foo = (String) (proxie);
+              s.pn("<tr>");
+              s.pn("<td>&nbsp;</td>");
+              s.pn("<td nowrap>---&gt</td>");
+              String host=getHost(foo);
+              if(host==null){
+                  s.p("<td><a href="); s.p(ogg2m3u(foo)); s.p(">"); s.p(foo);
+                  s.pn("</a></td>");
+              }
+              else{
+                  s.p("<td><a href="); s.p(ogg2m3u(foo)); s.p(">"); s.p(foo.substring(host.length()-1)); s.p("</a>&nbsp;at&nbsp;");
+                  s.p("<a href="); s.p(host); s.p(">"); s.p(host); s.pn("</a></td>");
+              }   s.pn("</tr>");
+          }
       }
 
     }

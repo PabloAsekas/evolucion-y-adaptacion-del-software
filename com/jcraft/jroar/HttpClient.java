@@ -49,7 +49,8 @@ String touched="not yet";
 /*  public void write(Vector http_header, byte[] header,
 		    byte[] foo, int foostart, int foolength,
 		    byte[] bar, int barstart, int barlength) throws IOException{*/
-public void write(ArrayList http_header, byte[] header,
+  @Override
+  public void write(ArrayList http_header, byte[] header,
 		    byte[] foo, int foostart, int foolength,
 		    byte[] bar, int barstart, int barlength) throws IOException{  
 touched="done";
@@ -77,10 +78,11 @@ touched="done";
     ready=false;
   }
 
+  @Override
   public void close(){
     if(!headerIsSent){
       try{Page.unknown(ms, file);}
-      catch(Exception e){}
+      catch(IOException e){}
     }
     try{ms.close();}
     catch(Exception e){}
@@ -88,8 +90,10 @@ touched="done";
     super.close();
   }
 
+  @Override
   public boolean isRunning(){ return (ms!=null);}
 
+  @Override
   public String toString(){
     return super.toString()+",hederIsSent="+headerIsSent+",touched="+touched+",lasttime="+lasttime+",ready="+ready+(ms!=null ? ",from="+ms.socket.getInetAddress() : ",ms=null")+"<br>";
   }

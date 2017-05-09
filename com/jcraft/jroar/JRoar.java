@@ -28,7 +28,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.applet.*;
 
-import com.jcraft.jogg.*;
+//import com.jcraft.jogg.*;
 
 public class JRoar extends Applet implements Runnable{
   static final String version="0.0.9";
@@ -49,6 +49,7 @@ public class JRoar extends Applet implements Runnable{
   public JRoar(){
   }
 
+  @Override
   public void init(){
     String s;
 
@@ -57,7 +58,7 @@ public class JRoar extends Applet implements Runnable{
     s=getParameter("jroar.port");
     if(s!=null){
       try{ HttpServer.port=Integer.parseInt(s); }
-      catch(Exception e){}
+      catch(NumberFormatException e){}
     }
 
 //  s=getParameter("jroar.ipaddress");
@@ -77,15 +78,13 @@ public class JRoar extends Applet implements Runnable{
 
     add(mount = new Button("Control"));
 
-    mount.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
+    mount.addActionListener((ActionEvent e) -> {
         try{
-          getAppletContext().showStatus("Opening "+HttpServer.myURL+"/ctrl.html");
-          URL url=new URL(HttpServer.myURL+"/ctrl.html");
-          getAppletContext().showDocument(url, "_blank");
-	}
-	catch(Exception ee){System.out.println(ee);}
-      }
+            getAppletContext().showStatus("Opening "+HttpServer.myURL+"/ctrl.html");
+            URL url=new URL(HttpServer.myURL+"/ctrl.html");
+            getAppletContext().showDocument(url, "_blank");
+        }
+        catch(MalformedURLException ee){System.out.println(ee);}
     });
     setBackground(Color.white);
     (new Thread(this)).start();
@@ -93,6 +92,7 @@ public class JRoar extends Applet implements Runnable{
 
   static WatchDog wd=null;
 
+  @Override
   public void run(){
     HttpServer httpServer=new HttpServer();
     httpServer.start();
@@ -124,7 +124,7 @@ public class JRoar extends Applet implements Runnable{
     for(int i=0; i<arg.length; i++){
       if(arg[i].equals("-port") && arg.length>i+1){
         try{ HttpServer.port=Integer.parseInt(arg[i+1]);}
-	catch(Exception e){}
+	catch(NumberFormatException e){}
 	i++;
       }
 //    else if(arg[i].equals("-ipaddress") && arg.length>i+1){
@@ -153,7 +153,7 @@ public class JRoar extends Applet implements Runnable{
         i+=2;
         if(arg.length>i+1 && !(arg[i+1].startsWith("-"))){
           try{ proxy.setLimit(Integer.parseInt(arg[i+1])); }
-          catch(Exception e){
+          catch(NumberFormatException e){
 	  }
           i++;
 	}
@@ -163,7 +163,7 @@ public class JRoar extends Applet implements Runnable{
         i+=2;
         if(arg.length>i+1 && !(arg[i+1].startsWith("-"))){
           try{ p.setLimit(Integer.parseInt(arg[i+1])); }
-          catch(Exception e){
+          catch(NumberFormatException e){
 	  }
           i++;
 	}
@@ -172,7 +172,7 @@ public class JRoar extends Applet implements Runnable{
       else if(arg[i].equals("-udp") && arg.length>i+4){
         int port=0;
         try{ port=Integer.parseInt(arg[i+3]);}
-  	catch(Exception e){System.err.println(e);}
+  	catch(NumberFormatException e){System.err.println(e);}
         UDPBroadcast u=new UDPBroadcast(arg[i+1], // src mount point
                                         arg[i+2], // broadcast address
 					port,     // port number
@@ -182,7 +182,7 @@ public class JRoar extends Applet implements Runnable{
       else if(arg[i].equals("-shout") && arg.length>i+5){
         int port=0;
         try{ port=Integer.parseInt(arg[i+3]);}
-  	catch(Exception e){System.err.println(e);}
+  	catch(NumberFormatException e){System.err.println(e);}
         ShoutClient sc=new ShoutClient(arg[i+1], // src mount point
                                        arg[i+2], // dst ip address
                                        port,     // dst port number
@@ -195,7 +195,7 @@ public class JRoar extends Applet implements Runnable{
           Class classObject=Class.forName(arg[i+2]);
           Page.register(arg[i+1], arg[i+2]);
         }
-        catch(Exception e){
+        catch(ClassNotFoundException e){
           System.err.println("Unknown class: "+arg[i+2]);
         }
         i+=2;
@@ -215,7 +215,7 @@ public class JRoar extends Applet implements Runnable{
 	  System.out.println("c: "+c);
           addMountPointListener((MountPointListener)(c.newInstance()));
         }
-        catch(Exception e){
+        catch(ClassNotFoundException | IllegalAccessException | InstantiationException e){
           System.err.println("Unknown listener class: "+arg[i+1]);
         }
         i++;
@@ -226,9 +226,9 @@ public class JRoar extends Applet implements Runnable{
       }
       else {
         System.err.println("invalid option: "+arg[i]);
-        for(int ii=0; ii<usage.length; ii++){
-          System.err.println(usage[ii]);
-	}
+          for (String usage1 : usage) {
+              System.err.println(usage1);
+          }
         System.exit(-1);
       }
     }
@@ -280,7 +280,7 @@ public class JRoar extends Applet implements Runnable{
         URLConnection urlc=url.openConnection();
         pstream=urlc.getInputStream();
       }
-      catch(Exception ee){
+      catch(IOException ee){
         System.err.println(ee); 	    
         return null;
       }
@@ -289,7 +289,7 @@ public class JRoar extends Applet implements Runnable{
       try{
         pstream=new FileInputStream(System.getProperty("user.dir")+"/"+m3u);
       }
-      catch(Exception ee){
+      catch(FileNotFoundException ee){
         System.err.println(ee); 	    
         return null;
       }
@@ -310,11 +310,11 @@ System.out.println("playFile ("+line+")");
   }
 
   private static String readline(InputStream is) {
-    StringBuffer rtn=new StringBuffer();
+    StringBuilder rtn=new StringBuilder();
     int temp;
     do {
       try {temp=is.read();}
-      catch(Exception e){return(null);}
+      catch(IOException e){return(null);}
       if(temp==-1){ return(null);}
       if(temp!=0 && temp!='\n')rtn.append((char)temp);
     }while(temp!='\n');                                                        
@@ -349,6 +349,7 @@ System.out.println("playFile ("+line+")");
 
   private static final int WATCHDOGSLEEP=3000;
   static class WatchDog extends Thread{
+    @Override
     public void run(){
       Source source;
       Enumeration sources;
@@ -377,7 +378,7 @@ System.out.println("WatchDog: "+e);
 	}
 
         try{Thread.sleep(WATCHDOGSLEEP);}
-        catch(Exception e){}
+        catch(InterruptedException e){}
       }
     }
   }
