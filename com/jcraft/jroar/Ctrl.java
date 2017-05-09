@@ -34,7 +34,7 @@ class Ctrl extends Page{
 
 //  public void kick(MySocket s, Hashtable vars, Vector httpheader) throws IOException{
   @Override
-    public void kick(MySocket s, Hashtable vars, ArrayList httpheader) throws IOException{
+    public void kick(MySocket s, HashMap vars, ArrayList httpheader) throws IOException{
     count++;
     s.println( "HTTP/1.0 200 OK" );
     s.println( "Content-Type: text/html" );
@@ -49,8 +49,9 @@ class Ctrl extends Page{
     s.pn("<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>");
     s.println("<link href='http://www.conocemadrid.esy.es/jroar.css' rel='stylesheet' type='text/css' media='all' />");
     s.println("</HEAD><BODY>");
-    Enumeration keys=Source.sources.keys();
-    if(keys.hasMoreElements()){ 
+    Set keys=Source.sources.keySet();
+    Iterator it = keys.iterator();
+    if(it.hasNext()){ 
       //s.println("Mount points.<br>"); 
     }
     else{ //s.println("There is no mount point.<br>");   
@@ -76,8 +77,8 @@ class Ctrl extends Page{
 "  </div>\n" +
 "</nav>");
     s.println("<table cellpadding=3 cellspacing=0 border=0>");
-    for(; keys.hasMoreElements();){
-      String mountpoint=((String)(keys.nextElement()));
+    for(; it.hasNext();){
+      String mountpoint=((String)(it.next()));
       Source source=Source.getSource(mountpoint); if(source==null) continue;
       String source_name=source.source;
 
@@ -184,16 +185,17 @@ class Ctrl extends Page{
 
     synchronized(Client.clients){
 
-    keys=Source.sources.keys();
-    if(keys.hasMoreElements()){
+    keys=Source.sources.keySet();
+    it = keys.iterator();
+    if(it.hasNext()){
     s.println("<hr width=80%>");
     s.println("<font size=+1>Drop</font>");
     s.println("<table cellpadding=3 cellspacing=0 border=0>");
     s.println("<form method=post action=/drop>");
 
     s.print("<select name=mpoint size=1>");
-    for(; keys.hasMoreElements();){
-      String mpoint=((String)(keys.nextElement()));
+    for(; it.hasNext();){
+      String mpoint=((String)(it.next()));
       s.println("<OPTION VALUE="+mpoint+">"+mpoint);
     }
     s.print("</select>");
@@ -208,8 +210,9 @@ class Ctrl extends Page{
     s.print("</table>");
     }
 
-    keys=Source.sources.keys();
-    if(keys.hasMoreElements()){
+    keys=Source.sources.keySet();
+    it = keys.iterator();
+    if(it.hasNext()){
     s.println("<hr width=80%>");
     s.println("<font size=+1>Shout</font>");
 
@@ -240,8 +243,8 @@ class Ctrl extends Page{
     s.println("<form method=post action=/shout>");
 
     s.print("<select name=srcmpoint size=1>");
-    for(; keys.hasMoreElements();){
-      String mpoint=((String)(keys.nextElement()));
+    for(; it.hasNext();){
+      String mpoint=((String)(it.next()));
       if(Source.sources.get(mpoint) instanceof UDPSource) continue;
       s.println("<OPTION VALUE="+mpoint+">"+mpoint);
     }
@@ -266,8 +269,9 @@ class Ctrl extends Page{
     s.print("</table>");
     }
 
-    keys=Source.sources.keys();
-    if(keys.hasMoreElements()){
+    keys=Source.sources.keySet();
+    it = keys.iterator();
+    if(it.hasNext()){
     s.println("<hr width=80%>");
     s.println("<font size=+1>UDP Broadcast</font>");
     s.println("<table cellpadding=3 cellspacing=0 border=0>");
@@ -277,8 +281,8 @@ class Ctrl extends Page{
 
     s.println("<td>");
     s.print("<select name=srcmpoint size=1>");
-    for(; keys.hasMoreElements();){
-      String mpoint=((String)(keys.nextElement()));
+    for(; it.hasNext();){
+      String mpoint=((String)(it.next()));
       Source source=Source.getSource(mpoint); 
       if(source==null || source instanceof UDPSource) continue;
       s.println("<OPTION VALUE="+mpoint+">"+mpoint);

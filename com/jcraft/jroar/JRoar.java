@@ -321,7 +321,7 @@ System.out.println("playFile ("+line+")");
     return(rtn.toString());
   }
 
-  public static Hashtable getSources(){
+  public static HashMap getSources(){
     return Source.sources;
   }
 
@@ -352,12 +352,13 @@ System.out.println("playFile ("+line+")");
     @Override
     public void run(){
       Source source;
-      Enumeration sources;
+      Collection sources;
       while(true){
         try{
-          sources=Source.sources.elements();
-          for(; sources.hasMoreElements();){
-            source=((Source)sources.nextElement());
+          sources=Source.sources.values();
+          Iterator it = sources.iterator();
+          for(; it.hasNext();){
+            source=((Source)it.next());
             int size=source.listeners.size();
             Client c=null;
             for(int i=0; i<size; i++){

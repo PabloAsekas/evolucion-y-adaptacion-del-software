@@ -31,7 +31,7 @@ class Shout extends Page{
 
 //  public void kick(MySocket ms, Hashtable vars, Vector h) throws IOException{
   @Override
-  public void kick(MySocket ms, Hashtable vars, ArrayList h) throws IOException{
+  public void kick(MySocket ms, HashMap vars, ArrayList h) throws IOException{
     String srcmpoint=(String)vars.get("srcmpoint");
     String dst=(String)vars.get("dst");
     String ice_passwd=(String)vars.get("ice-passwd");

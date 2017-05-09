@@ -99,8 +99,8 @@ class HttpServer extends Thread{
  
 class Dispatch{
   private MySocket mySocket=null;
-  private final String rootDirectory=".";
-  private final String defaultFile="index.html";
+  private String rootDirectory=".";
+  private String defaultFile="index.html";
 
   Dispatch(Socket s) throws IOException{
     super();
@@ -404,6 +404,7 @@ System.out.println(mySocket.socket.getInetAddress()+": "+foo+" "+(new java.util.
 
       if(bar.equalsIgnoreCase("SOURCE")){
         procSOURCE(foo, v);
+        return;
       }
 
     }

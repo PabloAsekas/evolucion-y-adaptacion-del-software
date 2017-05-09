@@ -27,7 +27,7 @@ import com.jcraft.jorbis.*;
 import com.jcraft.jogg.*;
 
 class Source{
-  static Hashtable sources=new Hashtable();
+  static HashMap sources=new HashMap();
 //  Vector listeners=new Vector();  
   final ArrayList listeners=new ArrayList();
   String mountpoint=null;
@@ -121,9 +121,9 @@ class Source{
 
   boolean parseHeader(com.jcraft.jogg.Page[] pages, int count){
     current_info.rate=0;
-    java.util.Hashtable oss=new java.util.Hashtable();
-    java.util.Hashtable vis=new java.util.Hashtable();
-    java.util.Hashtable vcs=new java.util.Hashtable();
+    java.util.HashMap oss=new HashMap();
+    java.util.HashMap vis=new HashMap();
+    java.util.HashMap vcs=new HashMap();
     Packet op=new Packet();
     for(int i=0; i<count; i++){
       com.jcraft.jogg.Page page=pages[i];

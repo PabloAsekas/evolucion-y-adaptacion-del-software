@@ -35,7 +35,7 @@ class HomePage extends Page{
 
 //  public void kick(MySocket s, Hashtable vars, Vector httpheader) throws IOException{
   @Override
-  public void kick(MySocket s, Hashtable vars, ArrayList httpheader) throws IOException{
+  public void kick(MySocket s, HashMap vars, ArrayList httpheader) throws IOException{
     count++;
     s.pn( "HTTP/1.0 200 OK" );
     s.pn( "Content-Type: text/html" );
@@ -72,8 +72,9 @@ class HomePage extends Page{
 "    </div>\n" +
 "  </div>\n" +
 "</nav>");
-    Enumeration keys=Source.sources.keys();
-    if(keys.hasMoreElements()){ 
+    Set keys=Source.sources.keySet();
+    Iterator it = keys.iterator();
+    if(it.hasNext()){ 
       //s.pn("Mount points.<br>"); 
     }
     else{ s.pn("<div class='container'>\n" +
@@ -83,8 +84,8 @@ class HomePage extends Page{
 "</div>"); }
 
     s.pn("<table cellpadding=3 cellspacing=0 border=0>");
-    for(; keys.hasMoreElements();){
-      String mountpoint=((String)(keys.nextElement()));
+    for(; it.hasNext();){
+      String mountpoint=((String)(it.next()));
       Source source=Source.getSource(mountpoint); if(source==null) continue;
       String source_name=source.source;
 

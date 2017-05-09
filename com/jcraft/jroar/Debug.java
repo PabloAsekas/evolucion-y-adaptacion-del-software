@@ -31,7 +31,7 @@ class Debug extends Page{
 
 //  public void kick(MySocket s, Hashtable vars, Vector httpheader) throws IOException{
   @Override
-  public void kick(MySocket s, Hashtable vars, ArrayList httpheader) throws IOException{
+  public void kick(MySocket s, HashMap vars, ArrayList httpheader) throws IOException{
     s.println( "HTTP/1.0 200 OK" );
     s.println( "Content-Type: text/html" );
     s.println( "" ) ;
@@ -45,9 +45,11 @@ class Debug extends Page{
 //    s.println("PlayFile.file: "+PlayFile.file+"<br>");
 
     Source source;
-    Enumeration sources=Source.sources.elements();
-    for(; sources.hasMoreElements();){
-      source=((Source)sources.nextElement());
+    Collection sources=Source.sources.values();
+    Iterator it = sources.iterator();
+    
+    for(; it.hasNext();){
+      source=((Source)it.next());
       s.println("Source: "+source);
       s.println("         "+source.listeners);
     }

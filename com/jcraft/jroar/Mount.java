@@ -31,7 +31,7 @@ class Mount extends Page{
 
 //  public void kick(MySocket ms, Hashtable vars, Vector h) throws IOException{
   @Override
-  public void kick(MySocket ms, Hashtable vars, ArrayList h) throws IOException{
+  public void kick(MySocket ms, HashMap vars, ArrayList h) throws IOException{
     String mountpoint=(String)vars.get("mountpoint");
     String source=(String)vars.get("source");
     String passwd=(String)vars.get("passwd");

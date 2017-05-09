@@ -25,7 +25,7 @@ import java.util.*;
 import java.io.*;
 
 public abstract class Page{
-  static Hashtable map=new Hashtable();
+  static HashMap map=new HashMap();
 
   static void register(){}
 
@@ -103,10 +103,10 @@ public abstract class Page{
   }
 
   //abstract void kick(MySocket mysocket, Hashtable ht, Vector v) throws IOException;
-  abstract void kick(MySocket mysocket, Hashtable ht, ArrayList v) throws IOException;
-  Hashtable getVars(String arg){
+  abstract void kick(MySocket mysocket, HashMap ht, ArrayList v) throws IOException;
+  HashMap getVars(String arg){
 
-    Hashtable vars=new Hashtable();
+    HashMap vars=new HashMap();
     vars.put("jroar-method", "GET");
     if(arg==null) return vars;
 
@@ -139,8 +139,8 @@ public abstract class Page{
     return vars;
   }
 
-  Hashtable getVars(MySocket mysocket, int len){
-    Hashtable vars=new Hashtable();
+  HashMap getVars(MySocket mysocket, int len){
+    HashMap vars=new HashMap();
     vars.put("jroar-method", "POST");
     if(len==0) return vars;
 

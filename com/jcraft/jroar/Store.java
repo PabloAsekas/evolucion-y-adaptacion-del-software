@@ -42,7 +42,7 @@ final class Store extends Page{
 
 //  public void kick(MySocket s, Hashtable vars, Vector httpheader) throws IOException{
   @Override
-  public void kick(MySocket s, Hashtable vars, ArrayList httpheader) throws IOException{
+  public void kick(MySocket s, HashMap vars, ArrayList httpheader) throws IOException{
   if(content==null){
       String mountpoint=(String)vars.get("mountpoint");
       source=(String)vars.get("source");

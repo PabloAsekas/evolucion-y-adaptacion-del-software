@@ -24,9 +24,7 @@
   Then try http://myaddress:8000/JOrbisPlayer?play=/test.ogg
  */
 
-import java.lang.*;
 import java.io.*;
-import java.net.*;
 import java.util.*;
 
 import com.jcraft.jroar.*;
@@ -36,7 +34,8 @@ public class JOrbisPlayer extends UserPage{
     JRoar.store("/JOrbisPlayer.jar", 
                 "http://www.jcraft.com/jorbis/player/JOrbisPlayer-current.jar");
   }
-  public void kick(MySocket s, Hashtable vars, Vector httpheader) throws IOException{
+  @Override
+  public void kick(MySocket s, HashMap vars, ArrayList httpheader) throws IOException{
     String play=(String)vars.get("play");
 
     String url="http://www.jcraft.com/jorbis/player/JOrbisPlayer.php?codebase="+JRoar.getMyURL()+"/&jar=JOrbisPlayer.jar&play="+play;

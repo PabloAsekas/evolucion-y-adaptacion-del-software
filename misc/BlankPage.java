@@ -27,15 +27,14 @@
 
  */
 
-import java.lang.*;
 import java.io.*;
-import java.net.*;
 import java.util.*;
 
 import com.jcraft.jroar.*;
 
 public class BlankPage extends UserPage{
-  public void kick(MySocket s, Hashtable vars, Vector httpheader) throws IOException{
+  @Override
+  public void kick(MySocket s, HashMap vars, ArrayList httpheader) throws IOException{
     s.println( "HTTP/1.0 200 OK" );
     s.println( "Content-Type: text/plain" );
     s.println( "" ) ;
