@@ -29,7 +29,6 @@ class Mount extends Page{
     register("/mount", Mount.class.getName());
   }
 
-//  public void kick(MySocket ms, Hashtable vars, Vector h) throws IOException{
   @Override
   public void kick(MySocket ms, HashMap vars, ArrayList h) throws IOException{
     String mountpoint=(String)vars.get("mountpoint");

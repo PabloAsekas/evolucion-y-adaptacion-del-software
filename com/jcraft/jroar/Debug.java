@@ -29,7 +29,6 @@ class Debug extends Page{
     register("/debug.html", Debug.class.getName());
   }
 
-//  public void kick(MySocket s, Hashtable vars, Vector httpheader) throws IOException{
   @Override
   public void kick(MySocket s, HashMap vars, ArrayList httpheader) throws IOException{
     s.println( "HTTP/1.0 200 OK" );

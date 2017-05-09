@@ -133,9 +133,7 @@ class Dispatch{
     mySocket.close( ) ;
   }
 
-//  private Vector getHttpHeader(MySocket ms) throws IOException{
   private ArrayList getHttpHeader(MySocket ms) throws IOException{
-    //Vector v=new Vector();
     ArrayList v=new ArrayList();
     String foo=null;
     while(true){
@@ -144,13 +142,11 @@ class Dispatch{
 	break;
       }
 System.out.println(" "+foo);
-      //v.addElement(foo);
       v.add(foo);
     }
     return v;
   }
 
-//  private void procPOST(String string, Vector httpheader) throws IOException{
   private void procPOST(String string, ArrayList httpheader) throws IOException{
     String foo;
     int	len=0;
@@ -160,7 +156,6 @@ System.out.println(" "+foo);
       file=file.substring(0 , file.indexOf(' '));
 
     for(int i=0; i<httpheader.size(); i++){
-      //foo=(String)httpheader.elementAt(i);
       foo=(String)httpheader.get(i);
 //System.out.println("foo: "+foo);
       if(foo.startsWith("Content-Length:") ||
@@ -197,7 +192,6 @@ System.out.println(" "+foo);
     Page.unknown(mySocket, file);
   }
 
-//  private void procGET(String string, Vector httpheader) throws IOException{
   private void procGET(String string, ArrayList httpheader) throws IOException{
 
     String file;
@@ -223,7 +217,6 @@ System.out.println(" "+foo);
       if(!reject && source.for_relay_only){
         reject=true;
         for(int i=0; i<httpheader.size(); i++){
-          //String foo=(String)httpheader.elementAt(i);
           String foo=(String)httpheader.get(i);
           if(foo.startsWith("jroar-proxy: ")){
             reject=false;
@@ -289,7 +282,6 @@ System.out.println(" "+foo);
     Page.unknown(mySocket, _file);
   }
 
-//  private void procHEAD(String string, Vector httpheader) throws IOException{
   private void procHEAD(String string, ArrayList httpheader) throws IOException{
     String file;
 
@@ -330,7 +322,6 @@ System.out.println(" "+foo);
     }
   }
 
-  //private void procSOURCE(String string, Vector httpheader) throws IOException{
   private void procSOURCE(String string, ArrayList httpheader) throws IOException{
 HttpServer.source_connections++;
 
@@ -383,7 +374,6 @@ System.out.println(mySocket.socket.getInetAddress()+": "+foo+" "+(new java.util.
       String bar=foo.substring(0, foo.indexOf(' '));
       //System.out.println(foo);
 
-      //Vector v=getHttpHeader(mySocket);
       ArrayList v=getHttpHeader(mySocket);
 //System.out.println(v);
 

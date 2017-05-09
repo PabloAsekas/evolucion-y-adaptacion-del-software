@@ -64,9 +64,6 @@ final class UDPBroadcast extends Client{
     udp_mpoint=new UDPSource(this, dstmpoint);
   }
 
-/*  public void write(Vector http_header, byte[] header,
-		    byte[] foo, int foostart, int foolength,
-		    byte[] bar, int barstart, int barlength) throws IOException{*/
   @Override
   public void write(ArrayList http_header, byte[] header,
 		    byte[] foo, int foostart, int foolength,

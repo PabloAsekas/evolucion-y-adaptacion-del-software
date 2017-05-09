@@ -35,12 +35,7 @@ class UDPSource extends Source {
   @Override
   synchronized void addListener(Client c){
     super.addListener(c);
-//    Vector http_header=new Vector();
     ArrayList http_header=new ArrayList();
-    /*http_header.addElement("HTTP/1.0 200 OK" );
-    http_header.addElement("udp-port: "+b.port);
-    http_header.addElement("udp-broadcast-address: "+b.baddress);
-    http_header.addElement("Content-Type: application/x-ogg");*/
     http_header.add("HTTP/1.0 200 OK" );
     http_header.add("udp-port: "+b.port);
     http_header.add("udp-broadcast-address: "+b.baddress);

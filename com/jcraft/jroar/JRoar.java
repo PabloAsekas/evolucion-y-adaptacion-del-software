@@ -28,8 +28,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.applet.*;
 
-//import com.jcraft.jogg.*;
-
 public class JRoar extends Applet implements Runnable{
   static final String version="0.0.9";
 
@@ -41,7 +39,6 @@ public class JRoar extends Applet implements Runnable{
   static String icepasswd=null;
   static String comment=null;
 
-//  static java.util.Vector mplisteners=new java.util.Vector();
   static java.util.ArrayList mplisteners=new java.util.ArrayList();
   
   Button mount;
@@ -269,7 +266,6 @@ public class JRoar extends Applet implements Runnable{
     wd.start();
   }
 
-//  static Vector fetch_m3u(String m3u){
   static ArrayList fetch_m3u(String m3u){    
     InputStream pstream=null;
     if(m3u.startsWith("http://")){
@@ -296,16 +292,14 @@ public class JRoar extends Applet implements Runnable{
     }
 
     String line=null;
-//    Vector foo=new Vector();
     ArrayList foo=new ArrayList();
     while(true){
-      try{line=readline(pstream);}catch(Exception e){}
-      if(line==null)break;
-System.out.println("playFile ("+line+")");
-      if(line.startsWith("#")) continue;
-//      foo.addElement(line);
-      foo.add(line);
-    }
+        try{line=readline(pstream);}catch(Exception e){}
+        if(line==null)break;
+        System.out.println("playFile ("+line+")");
+        if(line.startsWith("#")) continue;
+            foo.add(line);
+        }
     return foo;
   }
 
@@ -363,7 +357,6 @@ System.out.println("playFile ("+line+")");
             Client c=null;
             for(int i=0; i<size; i++){
               try{
-//                c=(Client)(source.listeners.elementAt(i));
                 c=(Client)(source.listeners.get(i));
                 if(c.ready && System.currentTimeMillis()-c.lasttime>1000){
 //System.out.println("drop: "+c);
@@ -386,13 +379,11 @@ System.out.println("WatchDog: "+e);
 
   static void addMountPointListener(MountPointListener foo){
     synchronized(mplisteners){
-//      mplisteners.addElement(foo);
       mplisteners.add(foo);
     }
   }
   static void removeMountPointListener(MountPointListener foo){
     synchronized(mplisteners){
-//      mplisteners.removeElement(foo);
       mplisteners.remove(foo);
     }
   }

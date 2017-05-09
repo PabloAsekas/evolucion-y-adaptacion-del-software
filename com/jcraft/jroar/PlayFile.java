@@ -54,12 +54,10 @@ final class PlayFile extends Source implements Runnable{
     this.source="playlist";
     if(file.startsWith("http://") && 
        file.endsWith(".m3u")){
-//      Vector foo=JRoar.fetch_m3u(file);
       ArrayList foo=JRoar.fetch_m3u(file);
       if(foo.size()>0){
         this.files=new String[foo.size()];
         for(int i=0; i<foo.size(); i++){
-//          this.files[i]=(String)foo.elementAt(i);
           this.files[i]=(String)foo.get(i);
 	} 
         this.source=file;
@@ -104,7 +102,6 @@ final class PlayFile extends Source implements Runnable{
     file_lastm=_file.lastModified();
     BufferedReader d
       = new BufferedReader(new InputStreamReader(new FileInputStream(_file)));
-//    Vector v=new Vector();
     ArrayList v=new ArrayList();
     try{
       while(true){
@@ -116,7 +113,6 @@ final class PlayFile extends Source implements Runnable{
 	   !s.endsWith(".spx")) 
 	  continue;
 System.out.println("playFile ("+s+")");
-//        v.addElement(s);
         v.add(s);
       }
       d.close();
@@ -124,7 +120,6 @@ System.out.println("playFile ("+s+")");
     catch(IOException ee){}
     this.files=new String[v.size()];
     for(int i=0; i<v.size(); i++){
-//      this.files[i]=(String)v.elementAt(i);
       this.files[i]=(String)v.get(i);
     }
   }
@@ -162,10 +157,7 @@ static String status="status0";
 //static String file="??";
   @Override
   public void run(){
-//    Vector http_header=new Vector();  
     ArrayList http_header=new ArrayList();
-//    http_header.addElement("HTTP/1.0 200 OK");
-//    http_header.addElement("Content-Type: application/x-ogg");
     http_header.add("HTTP/1.0 200 OK");
     http_header.add("Content-Type: application/x-ogg");
     int ii=-1;
@@ -333,7 +325,6 @@ status="status2";
               for(int i=0; i<size;){
                 status="status10";
                 try{
-//   	          c=(Client)(listeners.elementAt(i));
    	          c=(Client)(listeners.get(i));                    
                   c.write(http_header, header,
 		          og.header_base, og.header, og.header_len,
@@ -430,12 +421,10 @@ status="status14";
     synchronized(listeners){
       int size=listeners.size();
       for(int i=0; i<size;i++){
-//        c=(Client)(listeners.elementAt(i));
         c=(Client)(listeners.get(i));
         try{ c.close();}
         catch(Exception e){}
       }
-//      listeners.removeAllElements();
       listeners.removeAll(listeners);
     }
   }

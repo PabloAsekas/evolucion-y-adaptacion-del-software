@@ -31,7 +31,6 @@ final class Store extends Page{
   }
 
   String source=null;
-//  Vector header=new Vector();
   ArrayList header=new ArrayList();
   byte[] content=null;
   
@@ -40,7 +39,6 @@ final class Store extends Page{
     storeMethod(mountpoint, source);
   }
 
-//  public void kick(MySocket s, Hashtable vars, Vector httpheader) throws IOException{
   @Override
   public void kick(MySocket s, HashMap vars, ArrayList httpheader) throws IOException{
   if(content==null){
@@ -60,7 +58,6 @@ final class Store extends Page{
     s.pn( "HTTP/1.0 200 OK" );
     for(int i=0; i<header.size(); i++){
 //    System.out.println("i="+i);
-//      String foo=(String)header.elementAt(i);
       String foo=(String)header.get(i);
       s.pn(foo);
 //    System.out.println(foo);
@@ -92,7 +89,6 @@ final class Store extends Page{
               t=urlc.getHeaderFieldKey(i);
               if(s==null)break;
               // System.out.println("header: "+t+": "+s);
-//        header.addElement((t==null?s:(t+": "+s)));
             header.add((t==null?s:(t+": "+s)));
             i++;
           }

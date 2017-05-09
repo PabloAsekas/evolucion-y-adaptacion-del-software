@@ -102,7 +102,6 @@ public abstract class Page{
     mysocket.close();
   }
 
-  //abstract void kick(MySocket mysocket, Hashtable ht, Vector v) throws IOException;
   abstract void kick(MySocket mysocket, HashMap ht, ArrayList v) throws IOException;
   HashMap getVars(String arg){
 

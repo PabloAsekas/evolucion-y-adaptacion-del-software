@@ -31,14 +31,12 @@ class HttpClient extends Client{
 
 String touched="not yet";
 
-//  HttpClient(MySocket ms, Vector httpheader, String file){
   HttpClient(MySocket ms, ArrayList httpheader, String file){
     super();
     this.ms=ms;
     this.file=file;
     String foo=null;
     for(int i=0; i<httpheader.size(); i++){
-      //foo=(String)httpheader.elementAt(i);
       foo=(String)httpheader.get(i);
       if(foo.startsWith("jroar-proxy: ")){
         proxy=foo.substring(foo.indexOf(' ')+1);
@@ -46,9 +44,6 @@ String touched="not yet";
     }
   }
 
-/*  public void write(Vector http_header, byte[] header,
-		    byte[] foo, int foostart, int foolength,
-		    byte[] bar, int barstart, int barlength) throws IOException{*/
   @Override
   public void write(ArrayList http_header, byte[] header,
 		    byte[] foo, int foostart, int foolength,
@@ -62,7 +57,6 @@ touched="done";
         return;
       }
       for(int i=0; i<http_header.size(); i++){
-        //ms.println((String)(http_header.elementAt(i)));
         ms.println((String)(http_header.get(i)));
 
       }

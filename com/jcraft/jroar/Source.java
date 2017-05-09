@@ -28,7 +28,6 @@ import com.jcraft.jogg.*;
 
 class Source{
   static HashMap sources=new HashMap();
-//  Vector listeners=new Vector();  
   final ArrayList listeners=new ArrayList();
   String mountpoint=null;
   String source=null;
@@ -43,28 +42,22 @@ class Source{
   Comment current_comment=new Comment();
   int key_serialno=-1;
 
-//  private Vector proxies=null;
   private ArrayList proxies=null;
   void addListener(Client c){
     connections++;
     synchronized(listeners){
-//      listeners.addElement(c);
       listeners.add(c);
       if(c.proxy!=null){
-//        if(proxies==null)proxies=new Vector();
-        if(proxies==null)proxies=new ArrayList();        
-//         proxies.addElement(c.proxy);
+        if(proxies==null)proxies=new ArrayList();
          proxies.add(c.proxy);
       }
     }
   }
   void removeListener(Client c){
     synchronized(listeners){
-//      listeners.removeElement(c);
       listeners.remove(c);
       if(c.proxy!=null){
         if(proxies!=null){
-//          proxies.removeElement(c.proxy);
           proxies.remove(c.proxy);
 	}  
         //else{ } ???

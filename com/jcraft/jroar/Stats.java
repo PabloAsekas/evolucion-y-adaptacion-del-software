@@ -40,7 +40,6 @@ class Stats extends Page{
   static final private char[] SOURCES="sources".toCharArray();
   static final private char[] LISTENERS="listeners".toCharArray();
 
-//  public void kick(MySocket s, Hashtable vars, Vector httpheader) throws IOException{
   @Override
   public void kick(MySocket s, HashMap vars, ArrayList httpheader) throws IOException{      
 /*
@@ -101,40 +100,25 @@ class Stats extends Page{
 
     synchronized(Source.sources){
       if(HttpServer.source_connections>0){
-      wrap(sb, SOURCECONNECTIONS, HttpServer.source_connections);
-      Set keys=Source.sources.keySet();
-      wrap(sb, SOURCES, Source.sources.size());
-      Iterator it = keys.iterator();
-      if (it.hasNext()){
-          for(;it.hasNext();){
-          String mount=((String)(it.next()));
-          Source source=(Source)(Source.getSource(mount));
-          String x = "<source mount=\""+mount+"\">";
-          sb.append(x);
+        wrap(sb, SOURCECONNECTIONS, HttpServer.source_connections);
+        Set keys=Source.sources.keySet();
+        wrap(sb, SOURCES, Source.sources.size());
+        Iterator it = keys.iterator();
+        if (it.hasNext()){
+            for(;it.hasNext();){
+            String mount=((String)(it.next()));
+            Source source=(Source)(Source.getSource(mount));
+            String x = "<source mount=\""+mount+"\">";
+            sb.append(x);
 
-          if(source.getLimit()!=0){
-            wrap(sb, LIMIT, source.getLimit());
-	  }
-          wrap(sb, CONNECTIONS, source.getConnections());
-          wrap(sb, LISTENERS, source.getListeners());
-          sb.append("</source>");
-	}
-      }
-      /*if(keys.hasMoreElements()){ 
-        for(; keys.hasMoreElements();){
-          String mount=((String)(keys.nextElement()));
-          Source source=(Source)(Source.getSource(mount));
-          String x = "<source mount=\""+mount+"\">";
-          sb.append(x);
-
-          if(source.getLimit()!=0){
-            wrap(sb, LIMIT, source.getLimit());
-	  }
-          wrap(sb, CONNECTIONS, source.getConnections());
-          wrap(sb, LISTENERS, source.getListeners());
-          sb.append("</source>");
-	}
-      }*/
+            if(source.getLimit()!=0){
+              wrap(sb, LIMIT, source.getLimit());
+            }
+            wrap(sb, CONNECTIONS, source.getConnections());
+            wrap(sb, LISTENERS, source.getListeners());
+            sb.append("</source>");
+          }
+        }
       }
     }
     sb.append("</icestats>");

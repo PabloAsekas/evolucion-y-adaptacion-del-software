@@ -34,7 +34,6 @@ class Pls extends Page{
     super();
     this.pls=pls;
   }
-//  public void kick(MySocket ms, Hashtable vars, Vector h) throws IOException{
   @Override
   public void kick(MySocket ms, HashMap vars, ArrayList h) throws IOException{
     byte[] foo=pls.getBytes();

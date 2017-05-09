@@ -44,16 +44,13 @@ class Ice extends Source{
 
   private long lasttime=0;
 
-//  Vector http_header=new Vector();
   ArrayList http_header=new ArrayList();
   
   private static final String _icepasswd="ice-password: ";
   private static final String _ice="ice-";
-//  Ice(String mountpoint, MySocket mysocket, Vector headerfromice){
   Ice(String mountpoint, MySocket mysocket, ArrayList headerfromice){
     this(mountpoint, mysocket, headerfromice, "ICE/1.0");
   }
-//  Ice(String mountpoint, MySocket mysocket, Vector headerfromice, String protocol){
   Ice(String mountpoint, MySocket mysocket, ArrayList headerfromice, String protocol){
     super(mountpoint);
 
@@ -67,7 +64,6 @@ class Ice extends Source{
 
     if(protocol==null || protocol.startsWith("ICE")){
       for(int i=0; i<size;){
-//        foo=(String)headerfromice.elementAt(i);
         foo=(String)headerfromice.get(i);
 //System.out.println("fromIce: "+foo);
         if(foo.startsWith(_ice)){
@@ -76,8 +72,7 @@ class Ice extends Source{
             if(JRoar.icepasswd!=null && JRoar.icepasswd.equals(icepasswd)){
               accept=true;
 	    }
-          }        
-//          headerfromice.removeElement(foo);
+          }
             headerfromice.remove(foo);  
           size--;
           continue;
@@ -88,7 +83,6 @@ class Ice extends Source{
     else if(protocol.startsWith("HTTP")){
       String _auth="Authorization: Basic ";
       for(int i=0; i<size;){
-//        foo=(String)headerfromice.elementAt(i);
         foo=(String)headerfromice.get(i);
 System.out.println("fromIce: "+foo);
         if(foo.startsWith(_auth)){
@@ -111,7 +105,6 @@ System.out.println("code: "+new String(code));
 	     ){
             accept=true;
 	  }
-//          headerfromice.removeElement(foo);
           headerfromice.remove(foo);
           size--;
           continue;
@@ -245,7 +238,6 @@ System.out.println("accept: "+accept);
               Client c=null;
               for(int i=0; i<size;){
                 try{
-//	          c=(Client)(listeners.elementAt(i));
 	          c=(Client)(listeners.get(i));
                   c.write(http_header, header,
   			  og.header_base, og.header, og.header_len,
@@ -294,12 +286,10 @@ System.out.println("accept: "+accept);
     synchronized(listeners){
       int size=listeners.size();
       for(int i=0; i<size;i++){
-//        c=(Client)(listeners.elementAt(i));
         c=(Client)(listeners.get(i));
         try{ c.close();}
         catch(Exception e){}
       }
-//      listeners.removeAllElements();
       listeners.removeAll(listeners);
     }
   }

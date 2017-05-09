@@ -32,7 +32,6 @@ class Ctrl extends Page{
   private static final int REFRESH=60;
   private static int count=0;
 
-//  public void kick(MySocket s, Hashtable vars, Vector httpheader) throws IOException{
   @Override
     public void kick(MySocket s, HashMap vars, ArrayList httpheader) throws IOException{
     count++;
