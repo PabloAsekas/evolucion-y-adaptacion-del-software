@@ -21,9 +21,7 @@
  */
 
 package com.jcraft.jroar;
-import java.lang.*;
 import java.io.*;
-import java.net.*;
 import java.util.*;
 
 class UDPPage extends Page{
@@ -31,6 +29,7 @@ class UDPPage extends Page{
     register("/udp", UDPPage.class.getName());
   }
 //  public void kick(MySocket ms, Hashtable vars, Vector h) throws IOException{
+  @Override
   public void kick(MySocket ms, Hashtable vars, ArrayList h) throws IOException{
     String srcmpoint=(String)vars.get("srcmpoint");
     String _port=(String)vars.get("port");
@@ -44,7 +43,7 @@ class UDPPage extends Page{
 
     int port=0;
     try{ port=Integer.parseInt(_port);}
-    catch(Exception e){ }
+    catch(NumberFormatException e){ }
     if(srcmpoint!=null && 
        srcmpoint.length()>0 && 
        Source.getSource(srcmpoint)!=null &&

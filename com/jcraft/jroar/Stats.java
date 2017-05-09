@@ -21,9 +21,7 @@
  */
 
 package com.jcraft.jroar;
-import java.lang.*;
 import java.io.*;
-import java.net.*;
 import java.util.*;
 
 class Stats extends Page{
@@ -31,18 +29,19 @@ class Stats extends Page{
     register("/stats.xml", Stats.class.getName());
   }
 
-  static final private char[] _lt="<".toCharArray();
-  static final private char[] _gt=">".toCharArray();
-  static final private char[] _ltslash="</".toCharArray();
+  static final private char[] LT="<".toCharArray();
+  static final private char[] GT=">".toCharArray();
+  static final private char[] LTSLASH="</".toCharArray();
 
-  static final private char[] _client_connections="client_connections".toCharArray();
-  static final private char[] _limit="limit".toCharArray();
-  static final private char[] _connections="connections".toCharArray();
-  static final private char[] _source_connections="source_connections".toCharArray();
-  static final private char[] _sources="sources".toCharArray();
-  static final private char[] _listeners="listeners".toCharArray();
+  static final private char[] CLIENTCONNECTIONS="client_connections".toCharArray();
+  static final private char[] LIMIT="limit".toCharArray();
+  static final private char[] CONNECTIONS="connections".toCharArray();
+  static final private char[] SOURCECONNECTIONS="source_connections".toCharArray();
+  static final private char[] SOURCES="sources".toCharArray();
+  static final private char[] LISTENERS="listeners".toCharArray();
 
 //  public void kick(MySocket s, Hashtable vars, Vector httpheader) throws IOException{
+  @Override
   public void kick(MySocket s, Hashtable vars, ArrayList httpheader) throws IOException{      
 /*
     StringBuffer sb=new StringBuffer();
@@ -92,31 +91,32 @@ class Stats extends Page{
     sb.append("\n");
 */
 
-    StringBuffer sb=new StringBuffer();
+    StringBuilder sb=new StringBuilder();
     sb.append("<?xml version=\"1.0\"?>");
     sb.append("<icestats>");
     if(HttpServer.client_connections>0){
-      wrap(sb, _client_connections, HttpServer.client_connections);
+      wrap(sb, CLIENTCONNECTIONS, HttpServer.client_connections);
     }
-    wrap(sb, _connections, HttpServer.connections);
+    wrap(sb, CONNECTIONS, HttpServer.connections);
 
     synchronized(Source.sources){
       if(HttpServer.source_connections>0){
-      wrap(sb, _source_connections, HttpServer.source_connections);
+      wrap(sb, SOURCECONNECTIONS, HttpServer.source_connections);
       Enumeration keys=Source.sources.keys();
-      wrap(sb, _sources, Source.sources.size());
+      wrap(sb, SOURCES, Source.sources.size());
 
       if(keys.hasMoreElements()){ 
         for(; keys.hasMoreElements();){
           String mount=((String)(keys.nextElement()));
           Source source=(Source)(Source.getSource(mount));
-          sb.append("<source mount=\""+mount+"\">");
+          String x = "<source mount=\""+mount+"\">";
+          sb.append(x);
 
           if(source.getLimit()!=0){
-            wrap(sb, _limit, source.getLimit());
+            wrap(sb, LIMIT, source.getLimit());
 	  }
-          wrap(sb, _connections, source.getConnections());
-          wrap(sb, _listeners, source.getListeners());
+          wrap(sb, CONNECTIONS, source.getConnections());
+          wrap(sb, LISTENERS, source.getListeners());
           sb.append("</source>");
 	}
       }
@@ -136,42 +136,38 @@ class Stats extends Page{
   }
 
   static final private char[] blank="  ".toCharArray();
-  private void  indent(StringBuffer sb, int foo){
+  private void  indent(StringBuilder sb, int foo){
     for(int i=0; i<foo; i++){
       sb.append(blank);
     }
   }
 
-  private void  wrap(StringBuffer sb, char[] tag, int foo){
+  private void  wrap(StringBuilder sb, char[] tag, int foo){
     //sb.append("<"+tag+">"+foo+"</"+tag+">");
-    sb.append(_lt); sb.append(tag); sb.append(_gt);
+    sb.append(LT); sb.append(tag); sb.append(GT);
     sb.append(foo);
-    sb.append(_ltslash); sb.append(tag); sb.append(_gt);
-    return;
+    sb.append(LTSLASH); sb.append(tag); sb.append(GT);
   }
-  private void  wrap(StringBuffer sb, char[] tag, String foo){
+  private void  wrap(StringBuilder sb, char[] tag, String foo){
     //sb.append("<"+tag+">"+foo+"</"+tag+">");
-    sb.append(_lt); sb.append(tag); sb.append(_gt);
+    sb.append(LT); sb.append(tag); sb.append(GT);
     sb.append(foo);
-    sb.append(_ltslash); sb.append(tag); sb.append(_gt);
-    return;
+    sb.append(LTSLASH); sb.append(tag); sb.append(GT);
   }
-  private void  wrapln(StringBuffer sb, String tag, int foo){
+  private void  wrapln(StringBuilder sb, String tag, int foo){
     wrapln(sb, tag.toCharArray(), foo);
   }
-  private void  wrapln(StringBuffer sb, String tag, String foo){
+  private void  wrapln(StringBuilder sb, String tag, String foo){
     wrapln(sb, tag.toCharArray(), foo);
   }
-  private void  wrapln(StringBuffer sb, char[] tag, int foo){
+  private void  wrapln(StringBuilder sb, char[] tag, int foo){
     wrap(sb, tag, foo); ln(sb);
   }
-  private void  wrapln(StringBuffer sb, char[] tag, String foo){
+  private void  wrapln(StringBuilder sb, char[] tag, String foo){
     wrap(sb, tag, foo); ln(sb);
-    return;
   }
-  static final char[] _ln="\n".toCharArray();
-  private void  ln(StringBuffer sb){
-    sb.append(_ln);
-    return;
+  static final char[] LN="\n".toCharArray();
+  private void  ln(StringBuilder sb){
+    sb.append(LN);
   }
 }

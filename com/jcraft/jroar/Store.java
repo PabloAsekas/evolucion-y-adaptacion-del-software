@@ -25,9 +25,7 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
-import com.jcraft.jogg.*;
-
-class Store extends Page{
+final class Store extends Page{
   static void register(){
     register("/store", Mount.class.getName());
   }
@@ -36,23 +34,24 @@ class Store extends Page{
 //  Vector header=new Vector();
   ArrayList header=new ArrayList();
   byte[] content=null;
-
+  
   Store(String mountpoint, String source){
     this.source=source;
-    store(mountpoint, source);
+    storeMethod(mountpoint, source);
   }
 
 //  public void kick(MySocket s, Hashtable vars, Vector httpheader) throws IOException{
+  @Override
   public void kick(MySocket s, Hashtable vars, ArrayList httpheader) throws IOException{
   if(content==null){
       String mountpoint=(String)vars.get("mountpoint");
-      String source=(String)vars.get("source");
+      source=(String)vars.get("source");
       String passwd=(String)vars.get("passwd");
       if(passwd==null || !passwd.equals(JRoar.passwd)){
         forward(s, "/");
          return;
       }
-      store(mountpoint, source);
+      storeMethod(mountpoint, source);
       forward(s, "/");
       return;
     }
@@ -73,52 +72,49 @@ class Store extends Page{
     s.flush();
     s.close();
   }
-
-  void store(String mountpoint, String source){
+  
+  void storeMethod(String mountpoint, String source){
     try{
       URL url=new URL(source);
       URLConnection urlc=url.openConnection();
       String foo=urlc.getHeaderField(0); // HTTP/1.0 200 OK
-      InputStream bitStream=urlc.getInputStream();
-
-      if(foo.indexOf(" 200 ")==-1){
-        bitStream.close();
-        return;
-      }
-  
-      int i=0;
-      String s=null;
-      String t=null;
-      while(true){
-        s=urlc.getHeaderField(i);
-        t=urlc.getHeaderFieldKey(i);
-        if(s==null)break;
-        // System.out.println("header: "+t+": "+s);
+      ByteArrayOutputStream bos;
+      try(InputStream bitStream = urlc.getInputStream()) {
+          if(foo.contains(" 200 ")){
+              bitStream.close();
+              return;
+          }
+          int i=0;
+          String s;
+          String t;
+          while(true){
+              s=urlc.getHeaderField(i);
+              t=urlc.getHeaderFieldKey(i);
+              if(s==null)break;
+              // System.out.println("header: "+t+": "+s);
 //        header.addElement((t==null?s:(t+": "+s)));
-        header.add((t==null?s:(t+": "+s)));
-        i++;
+            header.add((t==null?s:(t+": "+s)));
+            i++;
+          }
+            bos = new ByteArrayOutputStream();
+            byte[] buffer=new byte[1024];
+            int bytes;
+            try{
+                while(true){
+                    bytes=bitStream.read(buffer, 0, 1024);
+                    if(bytes==-1)break;
+                    bos.write(buffer, 0, bytes);
+                }
+            }
+            catch(IOException ee){ }
       }
-
-      ByteArrayOutputStream bos=new ByteArrayOutputStream();
-      byte[] buffer=new byte[1024];
-      int bytes=0;
-      try{
-        while(true){
-          bytes=bitStream.read(buffer, 0, 1024);
-          if(bytes==-1)break;
-          bos.write(buffer, 0, bytes);
-        }
-      }
-      catch(Exception ee){ }
-
-      bitStream.close();
       bos.close();
 
       content=bos.toByteArray();
 
       register(mountpoint, this);
     }
-    catch(Exception e){
+    catch(IOException e){
     }
   }
 

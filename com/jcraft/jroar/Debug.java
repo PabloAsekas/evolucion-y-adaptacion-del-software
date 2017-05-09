@@ -77,17 +77,17 @@ s.println("<p>");
       sb.append(blank);
     }
   }
-  private void  wrap(StringBuffer sb, String tag, String  foo){
+  private void  wrap(StringBuilder sb, String tag, String  foo){
     sb.append("<"+tag+">"+foo+"</"+tag+">");
     return;
   }
-  private void  wrapln(StringBuffer sb, String tag, String  foo){
+  private void  wrapln(StringBuilder sb, String tag, String  foo){
     wrap(sb, tag, foo);
     ln(sb);
     return;
   }
   static final String _ln="\n";
-  private void  ln(StringBuffer sb){
+  private void  ln(StringBuilder sb){
     sb.append(_ln);
     return;
   }
