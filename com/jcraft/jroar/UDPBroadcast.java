@@ -25,7 +25,7 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
-class UDPBroadcast extends Client{
+final class UDPBroadcast extends Client{
   boolean headerIsSent=false;
   MySocket mysocket=null;
 
@@ -56,8 +56,10 @@ class UDPBroadcast extends Client{
 
     Source source=Source.getSource(srcmpoint);
     source.addListener(this);
-    if(source instanceof Proxy)
-      ((Proxy)source).kick();
+    if(!(source instanceof Proxy)) {
+      } else {
+        ((Proxy)source).kick();
+      }
 
     udp_mpoint=new UDPSource(this, dstmpoint);
   }
@@ -65,6 +67,7 @@ class UDPBroadcast extends Client{
 /*  public void write(Vector http_header, byte[] header,
 		    byte[] foo, int foostart, int foolength,
 		    byte[] bar, int barstart, int barlength) throws IOException{*/
+  @Override
   public void write(ArrayList http_header, byte[] header,
 		    byte[] foo, int foostart, int foolength,
 		    byte[] bar, int barstart, int barlength) throws IOException{
@@ -77,12 +80,14 @@ class UDPBroadcast extends Client{
     ready=false;
   }
 
+  @Override
   public void close(){
     try{io.close();}
-    catch(Exception e){}
+    catch(IOException e){}
     io=null;
     super.close();
   }
+  @Override
   public boolean isRunning(){ return (io!=null);}
 
 
@@ -105,14 +110,14 @@ class UDPBroadcast extends Client{
 	address = InetAddress.getByName(host);
 	socket = new DatagramSocket();
       }
-      catch(Exception e){System.err.println(e);}
+      catch(SocketException | UnknownHostException e){System.err.println(e);}
       recpacket = new DatagramPacket(buf, 1024);
       sndpacket=new DatagramPacket(outbuffer, 0, address, port);
     }
 
     void setTimeout(int i){
       try{socket.setSoTimeout(i);}
-      catch(Exception e){System.out.println(e);}
+      catch(SocketException e){System.out.println(e);}
     }
     /*
     int getByte() throws java.io.IOException{
@@ -201,7 +206,7 @@ class UDPBroadcast extends Client{
     */
     void write(byte[] array, int begin, int length) throws java.io.IOException{
       if(length<=0) return;
-      int i=0;
+      int i;
       while(true){
 	if((i=(outbuffer.length-outindex))<length){
 	  if(i!=0){

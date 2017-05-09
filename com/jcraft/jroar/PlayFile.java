@@ -27,7 +27,7 @@ import java.util.*;
 
 import com.jcraft.jogg.*;
 
-class PlayFile extends Source implements Runnable{
+final class PlayFile extends Source implements Runnable{
   static final int BUFSIZE=4096*2;
 
   private InputStream bitStream=null;
@@ -44,13 +44,13 @@ class PlayFile extends Source implements Runnable{
 
   PlayFile(String mountpoint, String[] files){
     super(mountpoint);
-HttpServer.source_connections++;
+    HttpServer.source_connections++;
     this.source="playlist";
     this.files=files;
   }
   PlayFile(String mountpoint, String file){
     super(mountpoint);
-HttpServer.source_connections++;
+    HttpServer.source_connections++;
     this.source="playlist";
     if(file.startsWith("http://") && 
        file.endsWith(".m3u")){
@@ -66,12 +66,12 @@ HttpServer.source_connections++;
       }
       else{
         drop();
-HttpServer.source_connections--;
+        HttpServer.source_connections--;
       }
     }
     else if(JRoar.running_as_applet){
       drop();
-HttpServer.source_connections--;
+      HttpServer.source_connections--;
     }
     else if(file.equals("-")){
       this.files=new String[1];
@@ -89,17 +89,17 @@ HttpServer.source_connections--;
       try{
 	updateFiles(file);
       }
-      catch(Exception e){
-System.out.println(e);
+      catch(IOException e){
+        System.out.println(e);
         drop();
-HttpServer.source_connections--;
+        HttpServer.source_connections--;
       }
     }
   }
 
   long file_lastm=0;
   private void updateFiles(String file) throws java.io.FileNotFoundException{
-System.out.println("loadPlaylist: "+file);
+    System.out.println("loadPlaylist: "+file);
     File _file=new File(file);
     file_lastm=_file.lastModified();
     BufferedReader d
@@ -121,7 +121,7 @@ System.out.println("playFile ("+s+")");
       }
       d.close();
     }
-    catch(Exception ee){}
+    catch(IOException ee){}
     this.files=new String[v.size()];
     for(int i=0; i<v.size(); i++){
 //      this.files[i]=(String)v.elementAt(i);
@@ -160,7 +160,7 @@ System.out.println(c);
 
 static String status="status0";
 //static String file="??";
-
+  @Override
   public void run(){
 //    Vector http_header=new Vector();  
     ArrayList http_header=new ArrayList();
@@ -177,7 +177,7 @@ static String status="status0";
 	try{
 	  updateFiles(file);
 	}
-	catch(Exception e){
+	catch(IOException e){
 	  break;
 	}
       }
@@ -197,7 +197,7 @@ status="status1";
 
           bitStream=urlc.getInputStream();
 	}
-	catch(Exception e){
+	catch(IOException e){
           System.out.println(e);
 	}
       }
@@ -209,7 +209,7 @@ status="status1";
 
       if(bitStream==null){
         try{ bitStream=new FileInputStream(files[ii]); }	
-        catch(Exception e){
+        catch(IOException e){
         System.out.println(e);
 	}
       }
@@ -240,8 +240,8 @@ status="status2";
 
       init_ogg();
 
-      int serialno=-1;
-      long granulepos=-1;
+      int serialno;
+      long granulepos;
 
       long start_time=-1;
       long last_sample=0;
@@ -254,26 +254,26 @@ status="status2";
 
       boolean eos=false;
       while(!eos){
-status="status3";
+        status="status3";
         if(me==null) break;
-status="status4";
+        status="status4";
         int index=oy.buffer(BUFSIZE);
         buffer=oy.data;
         try{ bytes=bitStream.read(buffer, index, BUFSIZE); }
-        catch(Exception e){
+        catch(IOException e){
           System.err.println(e);
           eos=true;
           continue;
         }
         if(bytes==-1)break;
         if(bytes==0)break;
-status="status5";
+        status="status5";
         oy.wrote(bytes);
 
         while(!eos){
-status="status6";
+          status="status6";
           if(me==null) break;
-status="status7";
+          status="status7";
           int result=oy.pageout(og);
 
 	  if(result==0)break; // need more data
@@ -289,7 +289,7 @@ status="status7";
 	    */
 	    serialno=og.serialno();
 	    granulepos=og.granulepos();
-status="status8";          
+            status="status8";          
 
 //System.out.println("og: "+og+", pos="+og.granulepos());
 
@@ -324,14 +324,14 @@ status="status8";
 	      }
 	    }
 
-status="status9";          
+              status="status9";          
 //            synchronized(listeners){  // In some case, c.write will block.
-status="status99";          
+              status="status99";          
   	      int size=listeners.size();
 
               Client c=null;
               for(int i=0; i<size;){
-status="status10";
+                status="status10";
                 try{
 //   	          c=(Client)(listeners.elementAt(i));
    	          c=(Client)(listeners.get(i));                    
@@ -339,19 +339,21 @@ status="status10";
 		          og.header_base, og.header, og.header_len,
 			  og.body_base, og.body, og.body_len);
                 }
-		catch(Exception e){
-                  c.close();
-                  removeListener(c);
-                  size--;
+		catch(IOException e){
+                  if (c!=null){
+                    c.close();
+                    removeListener(c);
+                    size--;
+                  } 
                   continue;
                 }
                 i++;
 	      }
 //	    }
-status="status11";
+            status="status11";
             if(granulepos!=0 &&
 	       key_serialno==serialno){
-status="status111";
+               status="status111";
                 if(last_sample==0){
   	          time=(System.currentTimeMillis()-start_time)*1000;
                 }
@@ -363,38 +365,38 @@ status="status111";
                 long sleep=(time/1000)-(System.currentTimeMillis()-start_time);
 //System.out.println("sleep="+sleep);
 //if(sleep>10000){sleep=0; time=(System.currentTimeMillis()-start_time);}
-status="status112";
+                status="status112";
                 if(sleep>0){
 //System.out.println("sleep: "+sleep);
   	          try{ Thread.sleep(sleep); }
-    	          catch(Exception e){}
+    	          catch(InterruptedException e){}
 		} 
-status="status12";
+                status="status12";
 	    }
 
             // sleep for green thread.
             try{ Thread.sleep(1); }
-            catch(Exception e){}
+            catch(InterruptedException e){}
 
-status="status13";
+            status="status13";
 
 //	    if(og.eos()!=0)eos=true;
 
 	  }
-status="status14";
+            status="status14";
         }
-status="status15";
+            status="status15";
       }
       oy.clear();
       try { if(bitStream!=null)bitStream.close(); } 
-      catch(Exception e) { }
+      catch(IOException e) { }
       bitStream=null;
-status="status16";
+      status="status16";
     }
 
     oy.clear();
     try { if(bitStream!=null)bitStream.close(); } 
-    catch(Exception e) { }
+    catch(IOException e) { }
     bitStream=null;
 status="status14";
 
@@ -416,7 +418,7 @@ status="status14";
       try {
        if(bitStream!=null)bitStream.close();
       } 
-      catch(Exception e) { }
+      catch(IOException e) { }
       bitStream=null;
       me=null;
     }
@@ -424,7 +426,7 @@ status="status14";
   }
 
   void drop_clients(){
-    Client c=null;
+    Client c;
     synchronized(listeners){
       int size=listeners.size();
       for(int i=0; i<size;i++){
@@ -437,7 +439,7 @@ status="status14";
       listeners.removeAll(listeners);
     }
   }
-
+  @Override
   void drop(){
     stop();
     //drop_clients();
