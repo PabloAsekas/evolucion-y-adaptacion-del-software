@@ -21,10 +21,8 @@
  */
 
 package com.jcraft.jroar;
-import java.lang.*;
 import java.io.*;
 import java.net.*;
-import java.util.*;
 
 class PeerCast {
   static String lookupHost="localhost:7144";
@@ -36,7 +34,7 @@ class PeerCast {
     lookupHost=arg;
   }
   static String getURL(String peercast){
-    InputStream pstream=null;
+    InputStream pstream;
     if(peercast.startsWith("peercast://")){
       peercast="http://"+lookupHost+peercast.substring("peercast:/".length());
     }
@@ -45,7 +43,7 @@ class PeerCast {
       URLConnection urlc=url.openConnection();
       pstream=urlc.getInputStream();
     }
-    catch(Exception ee){
+    catch(IOException ee){
       System.err.println(ee); 	    
       return null;
     }
@@ -59,15 +57,15 @@ class PeerCast {
         line=tmp;
       }
     }
-    try{pstream.close();}catch(Exception e){}
+    try{pstream.close();}catch(IOException e){}
     return line;
   }     
   static private String readline(InputStream is) {
-    StringBuffer rtn=new StringBuffer();
+    StringBuilder rtn=new StringBuilder();
     int temp;
     do {
       try {temp=is.read();}
-      catch(Exception e){return(null);}
+      catch(IOException e){return(null);}
       if(temp==-1){ return(null);}
       if(temp!=0 && temp!='\n' && temp!='\r')rtn.append((char)temp);
     }

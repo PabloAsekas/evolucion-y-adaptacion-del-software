@@ -25,7 +25,7 @@ import java.util.*;
 import java.io.*;
 
 public abstract class Page{
-  static Hashtable map=new Hashtable();
+  static HashMap map=new HashMap();
 
   static void register(){}
 
@@ -44,7 +44,7 @@ public abstract class Page{
   String decode(String arg){
 
     byte[] foo=arg.getBytes();
-    StringBuffer sb=new StringBuffer();
+    StringBuilder sb=new StringBuilder();
     for(int i=0; i<foo.length; i++){
       if(foo[i]=='+'){ sb.append((char)' '); continue; }
       if(foo[i]=='%' && i+2<foo.length){
@@ -102,24 +102,22 @@ public abstract class Page{
     mysocket.close();
   }
 
-  //abstract void kick(MySocket mysocket, Hashtable ht, Vector v) throws IOException;
-  abstract void kick(MySocket mysocket, Hashtable ht, ArrayList v) throws IOException;
-  Hashtable getVars(String arg){
+  abstract void kick(MySocket mysocket, HashMap ht, ArrayList v) throws IOException;
+  HashMap getVars(String arg){
 
-    Hashtable vars=new Hashtable();
+    HashMap vars=new HashMap();
     vars.put("jroar-method", "GET");
     if(arg==null) return vars;
 
     arg=decode(arg);
 
-    int foo=0;
+    int foo;
     int i=0;
     int c=0;
 
     String key, value;
 
     while(true){
-      key=value=null; 
 
       foo=arg.indexOf('=');
       if(foo==-1)break;
@@ -140,14 +138,14 @@ public abstract class Page{
     return vars;
   }
 
-  Hashtable getVars(MySocket mysocket, int len){
-    Hashtable vars=new Hashtable();
+  HashMap getVars(MySocket mysocket, int len){
+    HashMap vars=new HashMap();
     vars.put("jroar-method", "POST");
     if(len==0) return vars;
 
     int i=0;
     int c=0;
-    StringBuffer sb=new StringBuffer();
+    StringBuilder sb=new StringBuilder();
     String key, value;
 
     while(i<len){

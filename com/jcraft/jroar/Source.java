@@ -27,9 +27,8 @@ import com.jcraft.jorbis.*;
 import com.jcraft.jogg.*;
 
 class Source{
-  static Hashtable sources=new Hashtable();
-//  Vector listeners=new Vector();  
-  ArrayList listeners=new ArrayList();
+  static HashMap sources=new HashMap();
+  final ArrayList listeners=new ArrayList();
   String mountpoint=null;
   String source=null;
 
@@ -43,28 +42,22 @@ class Source{
   Comment current_comment=new Comment();
   int key_serialno=-1;
 
-//  private Vector proxies=null;
   private ArrayList proxies=null;
   void addListener(Client c){
     connections++;
     synchronized(listeners){
-//      listeners.addElement(c);
       listeners.add(c);
       if(c.proxy!=null){
-//        if(proxies==null)proxies=new Vector();
-        if(proxies==null)proxies=new ArrayList();        
-//         proxies.addElement(c.proxy);
+        if(proxies==null)proxies=new ArrayList();
          proxies.add(c.proxy);
       }
     }
   }
   void removeListener(Client c){
     synchronized(listeners){
-//      listeners.removeElement(c);
       listeners.remove(c);
       if(c.proxy!=null){
         if(proxies!=null){
-//          proxies.removeElement(c.proxy);
           proxies.remove(c.proxy);
 	}  
         //else{ } ???
@@ -121,27 +114,27 @@ class Source{
 
   boolean parseHeader(com.jcraft.jogg.Page[] pages, int count){
     current_info.rate=0;
-    java.util.Hashtable oss=new java.util.Hashtable();
-    java.util.Hashtable vis=new java.util.Hashtable();
-    java.util.Hashtable vcs=new java.util.Hashtable();
+    java.util.HashMap oss=new HashMap();
+    java.util.HashMap vis=new HashMap();
+    java.util.HashMap vcs=new HashMap();
     Packet op=new Packet();
     for(int i=0; i<count; i++){
       com.jcraft.jogg.Page page=pages[i];
       int serialno=page.serialno();
-      StreamState os=(StreamState)(oss.get(new Integer(serialno)));
-      Info vi=(Info)(vis.get(new Integer(serialno)));
-      Comment vc=(Comment)(vcs.get(new Integer(serialno)));
+      StreamState os=(StreamState)(oss.get(serialno));
+      Info vi=(Info)(vis.get(serialno));
+      Comment vc=(Comment)(vcs.get(serialno));
       if(os==null){
         os=new StreamState();
 	os.init(serialno);
 	os.reset();
-	oss.put(new Integer(serialno), os);
+	oss.put(serialno, os);
 	vi=new Info();
 	vi.init();
-	vis.put(new Integer(serialno), vi);
+	vis.put(serialno, vi);
 	vc=new Comment();
 	vc.init();
-	vcs.put(new Integer(serialno), vc);
+	vcs.put(serialno, vc);
       }
       os.pagein(page);
       os.packetout(op);
@@ -157,8 +150,8 @@ class Source{
 	 foo[base+4]=='i' &&
 	 foo[base+5]=='s'){
 	key_serialno=serialno;
-	current_info=vi=(Info)(vis.get(new Integer(serialno)));
-	vc=(Comment)(vcs.get(new Integer(serialno)));
+	current_info=vi=(Info)(vis.get(serialno));
+	vc=(Comment)(vcs.get(serialno));
 	vi.synthesis_headerin(vc, op);
       }
       else if(foo[base-1+0]=='S' &&
@@ -170,7 +163,7 @@ class Source{
 	      foo[base-1+6]==' ' &&
 	      foo[base-1+7]==' '){
 	key_serialno=serialno;
-	current_info=vi=(Info)(vis.get(new Integer(serialno)));
+	current_info=vi=(Info)(vis.get(serialno));
 	if(vi.rate==0){
 	vi.rate=(((foo[base-1+39]<<24)&0xff000000)|
 		 ((foo[base-1+38]<<16)&0xff0000)|
@@ -337,13 +330,7 @@ class Source{
   //System.out.print(new Character((char)(header[i])));
   //}
   //System.out.println("");
-
-
-    if(vi.rate!=0){
-      return true;
-    }
-
-    return false;
+    return vi.rate!=0;
   }
     
   Source(String mountpoint){

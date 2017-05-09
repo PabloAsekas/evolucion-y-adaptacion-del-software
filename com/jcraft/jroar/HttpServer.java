@@ -21,7 +21,6 @@
  */
 
 package com.jcraft.jroar;
-import java.lang.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -64,11 +63,12 @@ class HttpServer extends Thread{
         myURL="http://"+myaddress+":"+port;
       //System.out.println("myURL: "+myURL);
     }
-    catch(Exception e){
+    catch(UnknownHostException e){
       System.out.println(e );
     }
   }
 
+  @Override
   public void run(){
     Socket socket=null;
     while(true){
@@ -89,9 +89,10 @@ class HttpServer extends Thread{
       this.socket=socket;
       start();
     }
+    @Override
     public void run(){
       try{(new Dispatch(socket)).doit();}
-      catch(Exception e){}
+      catch(IOException e){}
     }
   }
 }
@@ -132,9 +133,7 @@ class Dispatch{
     mySocket.close( ) ;
   }
 
-//  private Vector getHttpHeader(MySocket ms) throws IOException{
   private ArrayList getHttpHeader(MySocket ms) throws IOException{
-    //Vector v=new Vector();
     ArrayList v=new ArrayList();
     String foo=null;
     while(true){
@@ -143,13 +142,11 @@ class Dispatch{
 	break;
       }
 System.out.println(" "+foo);
-      //v.addElement(foo);
       v.add(foo);
     }
     return v;
   }
 
-//  private void procPOST(String string, Vector httpheader) throws IOException{
   private void procPOST(String string, ArrayList httpheader) throws IOException{
     String foo;
     int	len=0;
@@ -159,7 +156,6 @@ System.out.println(" "+foo);
       file=file.substring(0 , file.indexOf(' '));
 
     for(int i=0; i<httpheader.size(); i++){
-      //foo=(String)httpheader.elementAt(i);
       foo=(String)httpheader.get(i);
 //System.out.println("foo: "+foo);
       if(foo.startsWith("Content-Length:") ||
@@ -191,12 +187,11 @@ System.out.println(" "+foo);
 	}
       }
     }
-    catch(Exception e){
+    catch(IOException | ClassNotFoundException | IllegalAccessException | InstantiationException e){
     }
     Page.unknown(mySocket, file);
   }
 
-//  private void procGET(String string, Vector httpheader) throws IOException{
   private void procGET(String string, ArrayList httpheader) throws IOException{
 
     String file;
@@ -222,7 +217,6 @@ System.out.println(" "+foo);
       if(!reject && source.for_relay_only){
         reject=true;
         for(int i=0; i<httpheader.size(); i++){
-          //String foo=(String)httpheader.elementAt(i);
           String foo=(String)httpheader.get(i);
           if(foo.startsWith("jroar-proxy: ")){
             reject=false;
@@ -270,7 +264,7 @@ System.out.println(" "+foo);
         }
       }
     }
-    catch(Exception e) {
+    catch(IOException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
     }
 
     if(_file.endsWith(".pls")){
@@ -288,7 +282,6 @@ System.out.println(" "+foo);
     Page.unknown(mySocket, _file);
   }
 
-//  private void procHEAD(String string, Vector httpheader) throws IOException{
   private void procHEAD(String string, ArrayList httpheader) throws IOException{
     String file;
 
@@ -329,7 +322,6 @@ System.out.println(" "+foo);
     }
   }
 
-  //private void procSOURCE(String string, Vector httpheader) throws IOException{
   private void procSOURCE(String string, ArrayList httpheader) throws IOException{
 HttpServer.source_connections++;
 
@@ -363,7 +355,7 @@ HttpServer.source_connections++;
         mySocket.flush();
         mySocket.close( ) ;
       }
-      catch(Exception e){
+      catch(IOException e){
       }
     }
   }
@@ -382,7 +374,6 @@ System.out.println(mySocket.socket.getInetAddress()+": "+foo+" "+(new java.util.
       String bar=foo.substring(0, foo.indexOf(' '));
       //System.out.println(foo);
 
-      //Vector v=getHttpHeader(mySocket);
       ArrayList v=getHttpHeader(mySocket);
 //System.out.println(v);
 
@@ -407,7 +398,7 @@ System.out.println(mySocket.socket.getInetAddress()+": "+foo+" "+(new java.util.
       }
 
     }
-    catch(Exception e){
+    catch(IOException e){
     }
   }
 }

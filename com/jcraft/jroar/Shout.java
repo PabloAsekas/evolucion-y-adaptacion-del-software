@@ -21,9 +21,7 @@
  */
 
 package com.jcraft.jroar;
-import java.lang.*;
 import java.io.*;
-import java.net.*;
 import java.util.*;
 
 class Shout extends Page{
@@ -31,8 +29,8 @@ class Shout extends Page{
     register("/shout", Shout.class.getName());
   }
 
-//  public void kick(MySocket ms, Hashtable vars, Vector h) throws IOException{
-  public void kick(MySocket ms, Hashtable vars, ArrayList h) throws IOException{
+  @Override
+  public void kick(MySocket ms, HashMap vars, ArrayList h) throws IOException{
     String srcmpoint=(String)vars.get("srcmpoint");
     String dst=(String)vars.get("dst");
     String ice_passwd=(String)vars.get("ice-passwd");
@@ -65,7 +63,9 @@ class Shout extends Page{
       dst=dst.substring(0,dst.indexOf(':'));
       if(_port.length()==0)_port="80";
       try{ port=Integer.parseInt(_port);}
-      catch(Exception e){}
+      catch(NumberFormatException  e){
+          System.err.println(e);
+      }
     }
     System.out.println("?");
 

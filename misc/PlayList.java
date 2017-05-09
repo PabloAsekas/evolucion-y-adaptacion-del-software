@@ -19,26 +19,26 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-import java.lang.*;
 import java.io.*;
-import java.net.*;
 import java.util.*;
 
 import com.jcraft.jroar.*;
 
 public class PlayList extends UserPage{
-  public void kick(MySocket s, Hashtable vars, Vector httpheader) throws IOException{
+  @Override
+  public void kick(MySocket s, HashMap vars, ArrayList httpheader) throws IOException{
     s.println( "HTTP/1.0 200 OK" );
     s.println( "Content-Type: text/plain" );
     s.println( "" ) ;
 
-    Enumeration keys=JRoar.getSources().keys();
-    for(; keys.hasMoreElements();){
-      String mountpoint=((String)(keys.nextElement()));
+    Set keys=JRoar.getSources().keySet();
+    Iterator it = keys.iterator();
+    for(; it.hasNext();){
+      String mountpoint=((String)(it.next()));
       try{
         s.println(mountpoint);
       }
-      catch(Exception e){
+      catch(IOException e){
         //s.println(e.toString());
       }
     }

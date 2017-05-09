@@ -25,7 +25,6 @@ import java.io.*;
 import java.util.*;
 
 abstract class Client{
-  //static Vector clients=new Vector();
   static ArrayList clients=new ArrayList();
   String proxy=null;
   long lasttime=0;
@@ -34,23 +33,17 @@ abstract class Client{
   Client(){
     lasttime=System.currentTimeMillis();
     synchronized(clients){
-      //clients.addElement(this);
       clients.add(this);
     }
   }
 
-  /*abstract void write(Vector http_header, byte[] header,
-	     byte[] foo, int foostart, int foolength,
-	     byte[] bar, int barstart, int barlength) throws IOException;*/
   abstract void write(ArrayList http_header, byte[] header,
 	     byte[] foo, int foostart, int foolength,
 	     byte[] bar, int barstart, int barlength) throws IOException;
   
   void close(){
     synchronized(clients){
-      //clients.removeElement(this);
-            clients.remove(this);
-
+        clients.remove(this);
     }
   }
   abstract boolean isRunning();

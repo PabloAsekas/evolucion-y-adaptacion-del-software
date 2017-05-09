@@ -27,16 +27,17 @@ import java.util.*;
 import com.jcraft.jroar.*;
 
 public class RadioStudio extends UserPage{
-  public void kick(MySocket s, Hashtable vars, Vector httpheader) throws IOException{
+  public void kick(MySocket s, HashMap vars, ArrayList httpheader) throws IOException{
     s.println( "HTTP/1.0 200 OK" );
     s.println( "Content-Type: text/plain" );
     s.println( "" ) ;
 
 //","/test.pls","/test.ogg","","0","0","
 
-    Enumeration keys=JRoar.getSources().keys();
-    for(; keys.hasMoreElements();){
-      String mountpoint=((String)(keys.nextElement()));
+    Set keys=JRoar.getSources().keySet();
+    Iterator it = keys.iterator();
+    for(; it.hasNext();){
+      String mountpoint=((String)(it.next()));
       try{
         int listeners=JRoar.getListeners(mountpoint);
         int connections=JRoar.getConnections(mountpoint);
@@ -46,7 +47,7 @@ public class RadioStudio extends UserPage{
         s.print(listeners); s.print("\",\"");
         s.print(connections); s.println("\",\"");
       }
-      catch(Exception e){
+      catch(JRoarException | IOException e){
         //s.println(e.toString());
       }
     }

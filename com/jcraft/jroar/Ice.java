@@ -22,7 +22,6 @@
 
 package com.jcraft.jroar;
 import java.io.*;
-import java.net.*;
 import java.util.*;
 
 import com.jcraft.jogg.*;
@@ -45,16 +44,13 @@ class Ice extends Source{
 
   private long lasttime=0;
 
-//  Vector http_header=new Vector();
   ArrayList http_header=new ArrayList();
   
   private static final String _icepasswd="ice-password: ";
   private static final String _ice="ice-";
-//  Ice(String mountpoint, MySocket mysocket, Vector headerfromice){
   Ice(String mountpoint, MySocket mysocket, ArrayList headerfromice){
     this(mountpoint, mysocket, headerfromice, "ICE/1.0");
   }
-//  Ice(String mountpoint, MySocket mysocket, Vector headerfromice, String protocol){
   Ice(String mountpoint, MySocket mysocket, ArrayList headerfromice, String protocol){
     super(mountpoint);
 
@@ -68,7 +64,6 @@ class Ice extends Source{
 
     if(protocol==null || protocol.startsWith("ICE")){
       for(int i=0; i<size;){
-//        foo=(String)headerfromice.elementAt(i);
         foo=(String)headerfromice.get(i);
 //System.out.println("fromIce: "+foo);
         if(foo.startsWith(_ice)){
@@ -77,8 +72,7 @@ class Ice extends Source{
             if(JRoar.icepasswd!=null && JRoar.icepasswd.equals(icepasswd)){
               accept=true;
 	    }
-          }        
-//          headerfromice.removeElement(foo);
+          }
             headerfromice.remove(foo);  
           size--;
           continue;
@@ -89,7 +83,6 @@ class Ice extends Source{
     else if(protocol.startsWith("HTTP")){
       String _auth="Authorization: Basic ";
       for(int i=0; i<size;){
-//        foo=(String)headerfromice.elementAt(i);
         foo=(String)headerfromice.get(i);
 System.out.println("fromIce: "+foo);
         if(foo.startsWith(_auth)){
@@ -112,7 +105,6 @@ System.out.println("code: "+new String(code));
 	     ){
             accept=true;
 	  }
-//          headerfromice.removeElement(foo);
           headerfromice.remove(foo);
           size--;
           continue;
@@ -127,7 +119,7 @@ System.out.println("accept: "+accept);
           mysocket.println("");
    	  mysocket.flush();
         }
-        catch(Exception e){}
+        catch(IOException e){}
         drop();
         mountpoint=null;
         try { if(mysocket!=null)mysocket.close(); } 
@@ -140,7 +132,7 @@ System.out.println("accept: "+accept);
         mysocket.println("");
         mysocket.flush();
       }
-      catch(Exception e){}
+      catch(IOException e){}
     }
     else {
       System.out.println("unkown protocol: "+protocol);
@@ -194,7 +186,7 @@ System.out.println("accept: "+accept);
         int index=oy.buffer(BUFSIZE);
         buffer=oy.data;
         try{ bytes=bitStream.read(buffer, index, BUFSIZE); }
-        catch(Exception e){
+        catch(IOException e){
 //        System.err.println(e);
           if(me==null)break;
           bytes=-1;
@@ -204,7 +196,7 @@ System.out.println("accept: "+accept);
         if(bytes==0)break;
 
         try{Thread.sleep(1);}  // sleep for green thread.
-        catch(Exception e){}
+        catch(InterruptedException e){}
 
         lasttime=System.currentTimeMillis();
 
@@ -246,13 +238,12 @@ System.out.println("accept: "+accept);
               Client c=null;
               for(int i=0; i<size;){
                 try{
-//	          c=(Client)(listeners.elementAt(i));
 	          c=(Client)(listeners.get(i));
                   c.write(http_header, header,
   			  og.header_base, og.header, og.header_len,
 			  og.body_base, og.body, og.body_len);
 		}
-		catch(Exception e){
+		catch(IOException e){
                   c.close();
                   removeListener(c);
                   size--;
@@ -295,21 +286,21 @@ System.out.println("accept: "+accept);
     synchronized(listeners){
       int size=listeners.size();
       for(int i=0; i<size;i++){
-//        c=(Client)(listeners.elementAt(i));
         c=(Client)(listeners.get(i));
         try{ c.close();}
         catch(Exception e){}
       }
-//      listeners.removeAllElements();
       listeners.removeAll(listeners);
     }
   }
 
-  void drop(){
+  @Override
+  final void drop(){
     drop_clients();
     super.drop();
   }
 
+  @Override
   void addListener(Client c){
     super.addListener(c);
     if((System.currentTimeMillis()-lasttime)>TIMEOUT){

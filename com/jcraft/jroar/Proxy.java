@@ -41,7 +41,7 @@ class Proxy extends Source implements Runnable{
 
   private Thread me=null;
 
-  private int RETRY=3;
+  private final int RETRY=3;
   int retry=RETRY;
 
   private long lasttime=0;
@@ -75,12 +75,11 @@ HttpServer.source_connections++;
     me=new Thread(this);
     me.start();
   }
-
+  @Override
   public void run(){
     //if(me==null) return; 
     lasttime=System.currentTimeMillis();
 
-//    Vector http_header=new Vector();
     ArrayList http_header=new ArrayList();
     com.jcraft.jogg.Page[] pages=new com.jcraft.jogg.Page[10];
     int page_count=0;
@@ -108,14 +107,13 @@ HttpServer.source_connections++;
       */
 
       int i=0;
-      String s=null;
-      String t=null;
+      String s;
+      String t;
       while(true){
         s=urlc.getHeaderField(i);
 	t=urlc.getHeaderFieldKey(i);
 	if(s==null)break;
 	// System.out.println("header: "+t+": "+s);
-//	http_header.addElement((t==null?s:(t+": "+s)));
 	http_header.add((t==null?s:(t+": "+s)));        
 	i++;
       }
@@ -124,7 +122,6 @@ HttpServer.source_connections++;
       foo="jroar-source."+index+": ";
       i=0;
       for(;i<http_header.size();i++){
-//        s=(String)(http_header.elementAt(i));
         s=(String)(http_header.get(i));
         if(s.startsWith(foo)){
            index++;
@@ -134,12 +131,11 @@ HttpServer.source_connections++;
 	}
         break;
       }
-//      http_header.addElement(foo+source);
       http_header.add(foo+source);
 
       bitStream=urlc.getInputStream();
     }
-    catch(Exception ee){
+    catch(IOException ee){
       System.err.println(ee); 	    
       me=null;
 //    drop();
@@ -149,10 +145,8 @@ HttpServer.source_connections++;
 
     init_ogg();
 
-    int serialno=-1;
-
     ByteArrayOutputStream _header=new ByteArrayOutputStream();
-    byte[] header=null;
+    byte[] header;
 
     retry=RETRY;
 
@@ -164,7 +158,7 @@ HttpServer.source_connections++;
         int index=oy.buffer(BUFSIZE);
         buffer=oy.data;
         try{ bytes=bitStream.read(buffer, index, BUFSIZE); }
-        catch(Exception e){
+        catch(IOException e){
           System.err.println(e);
           bytes=-1;
           break;
@@ -177,7 +171,7 @@ HttpServer.source_connections++;
         lasttime=System.currentTimeMillis();
 
         try{Thread.sleep(1);}  // sleep for green thread.
-        catch(Exception e){}
+        catch(InterruptedException e){}
 
         while(!eos){
 	  int result=oy.pageout(og);
@@ -234,16 +228,17 @@ HttpServer.source_connections++;
               Client c=null;
               for(int i=0; i<size;){
 	        try{
-//                  c=(Client)(listeners.elementAt(i));
                   c=(Client)(listeners.get(i));
                   c.write(http_header, header,
   			  og.header_base, og.header, og.header_len,
 			  og.body_base, og.body, og.body_len);
 		}
-		catch(Exception e){
-  	          c.close();
-                  removeListener(c);
-                  size--;
+		catch(IOException e){
+  	          if(c!=null){
+                   c.close();
+                   removeListener(c);
+                   size--;   
+                  } 
                   continue;
                 }
                 i++;
@@ -253,19 +248,16 @@ HttpServer.source_connections++;
 	  }
         }
       }
-
       if(bytes==-1){
         retry--;
         if(retry>0){
           System.out.println("Connection to "+_source+" is dropped. Retry("+retry+")");
-          header=null;
-          serialno=-1;
           init_ogg();
           try { if(bitStream!=null)bitStream.close(); } 
-          catch(Exception e) { System.out.println(e); }
+          catch(IOException e) { System.out.println(e); }
 
           try{Thread.sleep(1000);}
-          catch(Exception e) { }
+          catch(InterruptedException e) { }
 
           try{
             URL url=new URL(_source);
@@ -276,7 +268,7 @@ HttpServer.source_connections++;
             bitStream=urlc.getInputStream();
             continue;
 	  }
-	  catch(Exception e){
+	  catch(IOException e){
             retry=0;
 	  }
 	}
@@ -304,7 +296,7 @@ HttpServer.source_connections++;
       try {
        if(bitStream!=null)bitStream.close();
       } 
-      catch(Exception e) { }
+      catch(IOException e) { }
       bitStream=null;
       me=null;
 //    drop();
@@ -313,25 +305,23 @@ HttpServer.source_connections++;
   }
 
   void drop_clients(){
-    Client c=null;
+    Client c;
     synchronized(listeners){
       int size=listeners.size();
       for(int i=0; i<size;i++){
-//        c=(Client)(listeners.elementAt(i));
         c=(Client)(listeners.get(i));
         try{ c.close();}
         catch(Exception e){}
       }
-//      listeners.removeAllElements();
       listeners.removeAll(listeners);
     }
   }
-
+  @Override
   void drop(){
     drop_clients();
     super.drop();
   }
-
+  @Override
   public String toString(){
     return super.toString()+" me="+me+", bitStream="+bitStream;
   }

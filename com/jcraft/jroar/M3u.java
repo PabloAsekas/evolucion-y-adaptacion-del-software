@@ -21,7 +21,6 @@
  */
 
 package com.jcraft.jroar;
-import java.lang.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -35,8 +34,9 @@ class M3u extends Page{
     super();
     this.pls=pls;
   }
-//  public void kick(MySocket ms, Hashtable vars, Vector h) throws IOException{
-  public void kick(MySocket ms, Hashtable vars, ArrayList h) throws IOException{
+
+  @Override
+  public void kick(MySocket ms, HashMap vars, ArrayList h) throws IOException{
     byte[] foo=pls.getBytes();
     foo[foo.length-1]='g'; foo[foo.length-2]='g'; foo[foo.length-3]='o';
     String ogg=new String(foo);
@@ -68,7 +68,7 @@ class M3u extends Page{
         URLConnection urlc=url.openConnection();
         pstream=urlc.getInputStream();
       }
-      catch(Exception ee){
+      catch(IOException ee){
         System.err.println(ee); 	    
         return null;
       }
@@ -80,15 +80,15 @@ class M3u extends Page{
       if(line==null)break;
       break;
     }
-    try{pstream.close();}catch(Exception e){}
+    try{pstream.close();}catch(IOException e){}
     return line;
   }     
   static private String readline(InputStream is) {
-    StringBuffer rtn=new StringBuffer();
+    StringBuilder rtn=new StringBuilder();
     int temp;
     do {
       try {temp=is.read();}
-      catch(Exception e){return(null);}
+      catch(IOException e){return(null);}
       if(temp==-1){ return(null);}
       if(temp!=0 && temp!='\n')rtn.append((char)temp);
     }while(temp!='\n');                                                        
