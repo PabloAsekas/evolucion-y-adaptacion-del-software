@@ -68,9 +68,8 @@ class Ctrl extends Page{
 "    </div>\n" +
 "    <div class='collapse navbar-collapse' id='myNavbar'>\n" +
 "      <ul class='nav navbar-nav'>\n" +
-"        <li class='active'><a href='#'>Panel de control</a></li>\n" +
-"        <li><a href='#'>Page 2</a></li>\n" +
-"        <li><a href='#'>Page 3</a></li>\n" +
+"        <li><a href='/'>Home</a></li>\n" +
+"        <li class='active'><a href='/ctrl.html'>Panel de control</a></li>\n" +
 "      </ul>\n" +
 "    </div>\n" +
 "  </div>\n" +
@@ -189,6 +188,19 @@ class Ctrl extends Page{
     if(it.hasNext()){
     s.println("<hr width=80%>");
     
+    //aqui empiezan las opciones de control cuando se ha montado un streaming
+    //acordeon 1
+    s.println("<h3 align='center'>Opciones de los streamings</h3>");
+    s.println("<div class=\"container\">\n" +
+"  <div class=\"panel-group\" id=\"accordion\">\n" +
+"    <div class=\"panel panel-default\">\n" +
+"      <div class=\"panel-heading\">\n" +
+"        <h4 class=\"panel-title\">\n" +
+"          <a data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapse1\">Drop</a>\n" +
+"        </h4>\n" +
+"      </div>\n" +
+"      <div id=\"collapse1\" class=\"panel-collapse collapse\">\n");
+    //inicio del contenido del acordeon
     s.println("<div class='container-fluid' style='padding:35px;'>\n" +
 "  <div class='row'>\n" +
 "      <div class='col-md-6 col-md-offset-3' style='background-color:#eceff1; padding:35px; border-radius:15px'>\n" +
@@ -218,14 +230,35 @@ class Ctrl extends Page{
 "      </div>\n" +
 "  </div>\n" +
 "</div>");
-    }
+    //fin del contenido del acordeon 1
+    s.println("</div>\n" +
+"           </div>");
 
+    }
+//fin acordeon 1
     keys=Source.sources.keySet();
     it = keys.iterator();
     if(it.hasNext()){
-    s.println("<hr width=80%>");
-    s.println("<font size=+1>Shout</font>");
+    //acordeon 2
+    s.println("<div class=\"panel panel-default\">\n" +
+"      <div class=\"panel-heading\">\n" +
+"        <h4 class=\"panel-title\">\n" +
+"          <a data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapse2\">Shout</a>\n" +
+"        </h4>\n" +
+"      </div>\n" +
+"      <div id=\"collapse2\" class=\"panel-collapse collapse\">\n");
+    //inicio contenido acordeon 2
+        s.println("<div class='container-fluid' style='padding:35px;'>\n" +
+"  <div class='row'>\n" +
+"      <div class='col-md-6 col-md-offset-3' style='background-color:#eceff1; padding:35px; border-radius:15px'>\n" +
+"        <div class='row'>\n" +
+"                  <h3 align='center'>Shout</h3>\n" +
+"            <form method='post' action=/shout>\n" +
+"            <div class='form-group'>\n" +
+"                  <label>Shout:</label>\n" +
+"                  <select name=srcmpoint size=1>\n");
 
+    //ESTE APARTADO NO ESTA PASADO A INTERFAZ
     s.println("<table cellpadding=3 cellspacing=0 border=0>");
     for(int i=0; i<Client.clients.size(); i++){
       //Client c=((Client)(Client.clients.elementAt(i)));
@@ -246,96 +279,105 @@ class Ctrl extends Page{
 
       s.println("</tr>");
       }
-    }
+    }  
     s.println("</table>");
-
-    s.println("<table cellpadding=3 cellspacing=0 border=0>");
-    s.println("<form method=post action=/shout>");
-
-    s.print("<select name=srcmpoint size=1>");
+    //
+    
     for(; it.hasNext();){
       String mpoint=((String)(it.next()));
       if(Source.sources.get(mpoint) instanceof UDPSource) continue;
       s.println("<OPTION VALUE="+mpoint+">"+mpoint);
     }
-    s.print("</select>");
+    s.print("</select>\n" +
+"            </div>\n" +  
+"            <div class='form-group'>\n" +
+"                  <label>Shout:</label>\n" +
+"                  <input class='form-control' value='ice://'size=20 maxlength=50/>\n" +
+"            </div>\n" + 
+"            <div class='form-group'>\n" +
+"                  <label>Ice-Password:</label>\n" +
+"                  <input class='form-control' type=password name=ice-passwd value='' size='8' maxlength=8>\n" +
+"            </div>\n" +
+"            <div class='form-group'>\n" +
+"                  <label>Password:</label>\n" +
+"                  <input class='form-control' type=password name=passwd value=''length=8>\n" +
+"            </div>\n" +
+"            <input type=submit name=Shout value=Shout>\n" +            
+"            </form>\n" +
+"        </div>\n" +
+"      </div>\n" +
+"  </div>\n" +
+"</div>");
+    //fin del contenido del acordeon 2
+    s.println("</div>\n" +
+"           </div>");
 
-    s.println(" ---&gt ");
-
-    s.print("<input type=text name=dst value='ice://' size=20 maxlength=50>");
-    s.print("&nbsp;&nbsp;"); 
-    s.print("ice-passwd:&nbsp;"); 
-  s.print("<input type=password name=ice-passwd value='' size=8 maxlength=8>");
-    s.print("<br>"); 
-
-    s.print("&nbsp;&nbsp;"); 
-    s.print("passwd:&nbsp;"); 
-    s.print("<input type=password name=passwd value='' length=8>");
-
-    s.print("&nbsp;&nbsp;"); 
-    s.print("<input type=submit name=Shout value=Shout>");
-//  s.print("&nbsp;(<i>This functionality has not been implemented yet.</i>)");
-    s.print("</form>");
-    s.print("</table>");
     }
+//fin acordeon 2
 
     keys=Source.sources.keySet();
     it = keys.iterator();
     if(it.hasNext()){
-    s.println("<hr width=80%>");
-    s.println("<font size=+1>UDP Broadcast</font>");
-    s.println("<table cellpadding=3 cellspacing=0 border=0>");
-    s.println("<form method=post action=/udp>");
-
-    s.println("<tr>");
-
-    s.println("<td>");
-    s.print("<select name=srcmpoint size=1>");
+             //acordeon 3
+    s.println("<div class=\"panel panel-default\">\n" +
+"      <div class=\"panel-heading\">\n" +
+"        <h4 class=\"panel-title\">\n" +
+"          <a data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapse3\">UDP Broadcast</a>\n" +
+"        </h4>\n" +
+"      </div>\n" +
+"      <div id=\"collapse3\" class=\"panel-collapse collapse\">\n");
+    //inicio contenido acordeon 3
+    s.println("<div class='container-fluid' style='padding:35px;'>\n" +
+"  <div class='row'>\n" +
+"      <div class='col-md-6 col-md-offset-3' style='background-color:#eceff1; padding:35px; border-radius:15px'>\n" +
+"        <div class='row'>\n" +
+"                  <h3 align='center'>UDP Broadcast</h3>\n" +
+"            <form method='post' action=/udp>\n" +
+"            <div class='form-group'>\n" +
+"                  <label>UDP Broadcast:</label>\n" +
+"                  <select name=srcmpoint size=1>\n");
     for(; it.hasNext();){
       String mpoint=((String)(it.next()));
       Source source=Source.getSource(mpoint); 
       if(source==null || source instanceof UDPSource) continue;
       s.println("<OPTION VALUE="+mpoint+">"+mpoint);
     }
-    s.print("</select>");
-    s.println("</td>");
-
-    s.println("<td nowrap>---&gt</td>");
-
-    s.println("<td>");
-    s.print("port:&nbsp; "); 
-    s.print("<input type=text name=port value='' size=4 maxlength=4>");
-    s.print("&nbsp;&nbsp;broadcast address:&nbsp; "); 
-    s.print("<input type=text name=baddress value='' size=15 maxlength=20>");
-    s.println("</td>");
-    s.println("</tr>");
-
-    s.println("<tr>");
-    s.println("<td>&nbsp;</td>");
-    s.println("<td>&nbsp;</td>");
-
-    s.println("<td>");
-    s.print("mountpoint:&nbsp; "); 
-    s.print("<input type=text name=dstmpoint value='/' size=20 maxlength=50>");
-
-    s.print("&nbsp;&nbsp;"); 
-    s.print("passwd:&nbsp;"); 
-    s.print("<input type=password name=passwd value='' length=8>");
-
-    s.print("&nbsp;&nbsp;"); 
-    s.print("<input type=submit name=Broadcast value=Broadcast>");
-    s.println("</td>");
-    s.println("</tr>");
-
-    s.print("</form>");
-    s.print("</table>");
+    s.print("</select>\n" +
+"            </div>\n" +  
+"            <div class='form-group'>\n" +
+"                  <label>Port:</label>\n" +
+"                  <input class='form-control' name=port value='' size=4 maxlength=4/>\n" +
+"            </div>\n" + 
+"            <div class='form-group'>\n" +
+"                  <label>Broadcast address:</label>\n" +
+"                  <input class='form-control' type=text name=baddress value='' size=15 maxlength=20>\n" +
+"            </div>\n" +
+"            <div class='form-group'>\n" +
+"                  <label>Mountpoint:</label>\n" +
+"                  <input class='form-control' name=dstmpoint value='/' size=20 maxlength=50>\n" +
+"            </div>\n" +
+"            <div class='form-group'>\n" +
+"                  <label>Password:</label>\n" +
+"                  <input class='form-control' type=password name=passwd value='' length=8>\n" +
+"            </div>\n" +
+"            <input type=submit name=Broadcast value=Broadcast>\n" +            
+"            </form>\n" +
+"        </div>\n" +
+"      </div>\n" +
+"  </div>\n" +
+"</div>");
+        //fin del contenido del acordeon 3
+    s.println("</div>\n" +
+"           </div>");
     }
+    //fin acordeon 3
     }
 
     s.println("<hr width=80%>");
 
     s.println("<table width=100%><tr>");
-    s.println("<td align=\"right\"><small><i>"+count+"</i></small></td>");
+    s.p("<tr><td align=\"right\"><br><div class=\"alert alert-warning\" style=\"width: 150px; margin-right:20px;\">\n" +
+"  <small>Número de Streamings montados: &nbsp<i>"); s.p(count); s.pn("</i></small></div></td></tr>");
     s.println("</tr></table>");
 
     s.println("</BODY></HTML>");
