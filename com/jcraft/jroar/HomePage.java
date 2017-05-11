@@ -64,9 +64,8 @@ class HomePage extends Page{
 "    </div>\n" +
 "    <div class='collapse navbar-collapse' id='myNavbar'>\n" +
 "      <ul class='nav navbar-nav'>\n" +
-"        <li class='active'><a href='#'>Panel de control</a></li>\n" +
-"        <li><a href='#'>Page 2</a></li>\n" +
-"        <li><a href='#'>Page 3</a></li>\n" +
+"        <li class='active'><a href='/'>Home</a></li>\n" +
+"        <li><a href='/ctrl.html'>Panel de control</a></li>\n" +
 "      </ul>\n" +
 "    </div>\n" +
 "  </div>\n" +
@@ -162,7 +161,8 @@ class HomePage extends Page{
 
     s.pn("<table width=100%>");
     s.pn("<tr><td align=\"right\"><a style='margin-right:25px;' type=\"button\" href=\"/ctrl.html\" class=\"btn btn-primary btn-lg\"><span class=\"glyphicon glyphicon-cog\"></span>&nbsp;Control</a></td></tr>");
-    s.p("<tr><td align=\"right\"><small><i>"); s.p(count); s.pn("</i></small></td></tr>");
+    s.p("<tr><td align=\"right\"><br><div class=\"alert alert-warning\" style=\"width: 150px; margin-right:20px;\">\n" +
+"  <small>Número de Streamings montados: &nbsp<i>"); s.p(count); s.pn("</i></small></div></td></tr>");
     s.pn("</table>");
 
     s.pn("</BODY></HTML>");
