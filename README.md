@@ -1,3 +1,7 @@
+# Práctica de evolución y adaptación al software
+
+Teníamos que adaptar y evolucionar una aplicación que llevaba sin modificarse desde 2002.
+
 ### Kiuwan Metrics ###
 [![Kiuwan](https://www.kiuwan.com/github/rperezll/JRoar/badges/security.svg)](https://www.kiuwan.com/github/rperezll/JRoar)
 [![Kiuwan](https://www.kiuwan.com/github/rperezll/JRoar/badges/quality.svg)](https://www.kiuwan.com/github/rperezll/JRoar)
